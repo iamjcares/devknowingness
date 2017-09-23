@@ -1,4 +1,4 @@
 HelloVideo
 ===================
 
-Checkout the [homepage here](http://hellovideoapp.com) or [view the demo here](http://demo.hellovideoapp.com).
+Checkout the [homepage here](http://plusonet.com) or [view the demo here](http://demo.plusonet.com).
