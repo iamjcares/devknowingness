@@ -1,11 +1,14 @@
 <?php
 
-class Tag extends Eloquent {
-	protected $guarded = array();
+class Tag extends Eloquent
+{
 
-	public static $rules = array();
+    protected $guarded = array();
+    public static $rules = array();
 
-	public function videos(){
-		return $this->belongsToMany('Video');
-	}
+    public function videos()
+    {
+        return $this->belongsToMany('Course');
+    }
+
 }
