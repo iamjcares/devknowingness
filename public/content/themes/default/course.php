@@ -9,7 +9,7 @@
     <div id="video_bg_dim" class="darker"></div>
     <div class="container">
         <div id="video_container" class="fitvid">
-            <iframe src="https://embed.revision3.com/player/embed?videoId=35835&external=true&width=640&height=360" width="640" height="360" allowFullScreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+            <iframe width="560" height="315" src="//www.youtube.com/embed/nYzoQVea1NI" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 </div>
