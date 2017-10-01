@@ -12,14 +12,14 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function() {
 
     /*
       |--------------------------------------------------------------------------
-      | Video Page Routes
+      | Course Page Routes
       |--------------------------------------------------------------------------
      */
 
-    Route::get('videos', array('uses' => 'ThemeVideoController@videos', 'as' => 'videos'));
-    Route::get('videos/category/{category}', 'ThemeVideoController@category');
-    Route::get('videos/tag/{tag}', 'ThemeVideoController@tag');
-    Route::get('video/{id}', 'ThemeVideoController@index');
+    Route::get('courses', array('uses' => 'ThemeCourseController@courses', 'as' => 'courses'));
+    Route::get('courses/category/{category}', 'ThemeCourseController@category');
+    Route::get('courses/tag/{tag}', 'ThemeCourseController@tag');
+    Route::get('course/{id}', 'ThemeCourseController@index');
 
 
     /*

@@ -2,67 +2,70 @@
 
 use \Redirect as Redirect;
 
-class ThemeFavoriteController extends \BaseController {
+class ThemeFavoriteController extends \BaseController
+{
 
-	public function __construct()
-	{
-		$this->middleware('secure');
-	}
+    public function __construct()
+    {
+        $this->middleware('secure');
+    }
 
-	// Add Media Like
-	public function favorite(){
-		$video_id = Input::get('video_id');
-		$favorite = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video_id)->first();
-		if(isset($favorite->id)){ 
-			$favorite->delete();
-		} else {
-			$favorite = new Favorite;
-			$favorite->user_id = Auth::user()->id;
-			$favorite->video_id = $video_id;
-			$favorite->save();
-			echo $favorite;
-		}
-	}
+    // Add Media Like
+    public function favorite()
+    {
+        $course_id = Input::get('course_id');
+        $favorite = Favorite::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course_id)->first();
+        if (isset($favorite->id)) {
+            $favorite->delete();
+        } else {
+            $favorite = new Favorite;
+            $favorite->user_id = Auth::user()->id;
+            $favorite->course_id = $course_id;
+            $favorite->save();
+            echo $favorite;
+        }
+    }
 
-	public function show_favorites(){
+    public function show_favorites()
+    {
 
-		if(!Auth::guest()):
-			
-			$page = Input::get('page');
+        if (!Auth::guest()):
 
-			if(empty($page)){
-				$page = 1;
-			}
-			
-			$favorites = Favorite::where('user_id', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+            $page = Input::get('page');
 
-			$favorite_array = array();
-			foreach($favorites as $key => $fave){
-				array_push($favorite_array, $fave->video_id);
-			}
+            if (empty($page)) {
+                $page = 1;
+            }
 
-			$videos = Video::where('active', '=', '1')->whereIn('id', $favorite_array)->paginate(12);
+            $favorites = Favorite::where('user_id', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
-	        $data = array(
-		            'videos' => $videos,
-		            'page_title' => ucfirst(Auth::user()->username) . '\'s Favorite Videos',
-		            'current_page' => $page,
-		            'page_description' => 'Page ' . $page,
-		            'menu' => Menu::orderBy('order', 'ASC')->get(),
-		            'pagination_url' => '/favorites',
-		            'video_categories' => VideoCategory::all(),
-			'post_categories' => PostCategory::all(),
-			'theme_settings' => ThemeHelper::getThemeSettings(),
-			'pages' => Page::all(),
-	            );
+            $favorite_array = array();
+            foreach ($favorites as $key => $fave) {
+                array_push($favorite_array, $fave->course_id);
+            }
 
-	        return View::make('Theme::video-list', $data);
+            $courses = Course::where('active', '=', '1')->whereIn('id', $favorite_array)->paginate(12);
 
-	    else:
+            $data = array(
+                'courses' => $courses,
+                'page_title' => ucfirst(Auth::user()->username) . '\'s Favorite Videos',
+                'current_page' => $page,
+                'page_description' => 'Page ' . $page,
+                'menu' => Menu::orderBy('order', 'ASC')->get(),
+                'pagination_url' => '/favorites',
+                'course_categories' => CourseCategory::all(),
+                'post_categories' => PostCategory::all(),
+                'theme_settings' => ThemeHelper::getThemeSettings(),
+                'pages' => Page::all(),
+            );
 
-	    	return Redirect::to('videos');
+            return View::make('Theme::course-list', $data);
 
-	    endif;
-	}
+        else:
+
+            return Redirect::to('courses');
+
+        endif;
+    }
 
 }

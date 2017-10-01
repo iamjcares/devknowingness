@@ -7,3 +7,10 @@
 - Added Gulpfiles for css compiling
 - Fixed Menu Items when they don't show correctly from multi ul to next
 - Added custom 404 page
+
+
+
+### custom
+- Added course-loop, extracted from video loop
+- Added course
+- modified function

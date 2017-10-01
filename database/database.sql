@@ -1,3 +1,30 @@
+CREATE TABLE `settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `website_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Knowingness ',
+  `website_description` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Your Premium Video CMS',
+  `logo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'logo.png',
+  `favicon` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'favicon.png',
+  `system_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'email@domain.com',
+  `demo_mode` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_https` tinyint(1) NOT NULL DEFAULT '0',
+  `theme` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `facebook_page_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `google_page_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `twitter_page_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `youtube_page_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `google_tracking_id` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `google_oauth_key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `courses_per_page` int(11) NOT NULL DEFAULT '12',
+  `posts_per_page` int(11) NOT NULL DEFAULT '12',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+
+
 CREATE TABLE `course_categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
@@ -115,4 +142,14 @@ CREATE TABLE `tags` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `tags_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `favorites` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -1,6 +1,6 @@
 <?php
 
-class VideoCategory extends Eloquent
+class CourseCategory extends Eloquent
 {
 
     protected $guarded = array();
