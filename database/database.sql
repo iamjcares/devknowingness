@@ -21,10 +21,6 @@ CREATE TABLE `settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-
-
-
 CREATE TABLE `course_categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
@@ -55,8 +51,9 @@ CREATE TABLE `courses` (
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `detail` text NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `image` varchar(255) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
   `course_category_id` int(11) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `featured` tinyint(1) NOT NULL DEFAULT '0',
@@ -72,7 +69,7 @@ VALUES
 	(2,'History of TMNT!','Today Arris tells you all you need to know about the Teenage Mutant Ninja Turtles!','<p>You remember that beloved show Teenage Mutant Ninja Turtles. In this video you will get a brief run down of the history of Teenage Mutant Ninja Turtles. The Teenage Mutant Ninja Turtles originated from a Comic Book back in 1984. This beloved comic book then evolved into the loved cartoon show that many people still remember. The famous cartoon show began in 1986 and lasted for 10 years. Since then there have been many remakes of the Teenage Mutant Ninja Turtles that still air on TV today.</p>\r\n<p>Learn More about the Ninja Turtles on their <a href=\"http://en.wikipedia.org/wiki/Teenage_Mutant_Ninja_Turtles\" target=\"_blank\">Wikipedia Page</a>.</p>\r\n<p><a href=\"http://revision3.com/variant/history-of-tmnt/\" target=\"_blank\">View the original source of this video here.</a></p>',1,'October2014/history-of-tmnt.jpg',1,0,0,100,'2014-10-04 16:31:57','2015-02-28 15:26:59');
 	
 
-CREATE TABLE `course_chapters` (
+CREATE TABLE `chapters` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `course_id` int(11) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL,
@@ -153,3 +150,19 @@ CREATE TABLE `favorites` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `lectures` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `chapter_id` int(11) NOT NULL DEFAULT '0',
+  `type` varchar(5) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `order` int(11) NOT NULL DEFAULT '1',
+  `preview` tinyint(1) NOT NULL DEFAULT '0',
+  `duration` int(11) DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

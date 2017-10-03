@@ -1,10 +1,10 @@
 <?php
 
-class CourseChapter extends Eloquent
+class Chapter extends Eloquent
 {
 
     protected $guarded = array();
-    protected $table = 'course_chapters';
+    protected $table = 'chapters';
     public static $rules = array();
     protected $fillable = array('course_id', 'title', 'description', 'order');
 
@@ -13,9 +13,9 @@ class CourseChapter extends Eloquent
         return $this->belongsTo('Course');
     }
 
-    public function videos()
+    public function lectures()
     {
-        return $this->hasMany('Video');
+        return $this->hasMany('Lecture');
     }
 
 }

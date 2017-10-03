@@ -18,7 +18,7 @@ class ThemeFavoriteController extends \BaseController
         if (isset($favorite->id)) {
             $favorite->delete();
         } else {
-            $favorite = new Favorite;
+            $favorite = new Favorite();
             $favorite->user_id = Auth::user()->id;
             $favorite->course_id = $course_id;
             $favorite->save();

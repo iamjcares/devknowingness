@@ -2,7 +2,7 @@
 if (isset($course)):
     $media_title = $course->title;
     $url = ($settings->enable_https) ? secure_url('course') : URL::to('course');
-    $media_url = $url . '/' . $course->id;
+    $media_url = $url . '/' . $course->slug;
 elseif (isset($post)):
     $media_title = $post->title;
     $url = ($settings->enable_https) ? secure_url('post') : URL::to('post');

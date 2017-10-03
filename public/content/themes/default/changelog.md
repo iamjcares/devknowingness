@@ -14,3 +14,4 @@
 - Added course-loop, extracted from video loop
 - Added course
 - modified function
+- modified more the controller

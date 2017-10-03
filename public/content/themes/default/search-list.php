@@ -2,30 +2,30 @@
 
 <div class="container search-results">
 
-		<?php if(count($videos) < 1): ?>
-			<h4>No Video Search results found for <?= $search_value ?></h4>
-		<?php else: ?>
-			<h3>Video Search Results <span>for <?= $search_value ?></span></h3>
-		
-			<div class="row">
+    <?php if (count($courses) < 1): ?>
+        <h4>No Course Search results found for <?= $search_value ?></h4>
+    <?php else: ?>
+        <h3>Course Search Results <span>for <?= $search_value ?></span></h3>
 
-				<?php include('partials/video-loop.php'); ?>
+        <div class="row">
 
-			</div>
+            <?php include('partials/course-loop.php'); ?>
 
-		<?php endif; ?>
+        </div>
 
-		<?php if(count($posts) < 1): ?>
-			<h4>No Post Search results found for <?= $search_value ?></h4>
-		<?php else: ?>
-			<h3>Post Search Results <span>for <?= $search_value ?></span></h3>
+    <?php endif; ?>
 
-			<div class="row">
+    <?php if (count($posts) < 1): ?>
+        <h4>No Post Search results found for <?= $search_value ?></h4>
+    <?php else: ?>
+        <h3>Post Search Results <span>for <?= $search_value ?></span></h3>
 
-				<?php include('partials/post-loop.php'); ?>
+        <div class="row">
 
-			</div>
-		<?php endif; ?>
+            <?php include('partials/post-loop.php'); ?>
+
+        </div>
+    <?php endif; ?>
 
 </div>
 

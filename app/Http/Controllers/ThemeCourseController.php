@@ -22,19 +22,22 @@ class ThemeCourseController extends \BaseController
      */
     public function index($id)
     {
-        $course = Course::with('tags')->findOrFail($id);
+        $course = Course::with(['tags', 'objectives', 'requirements', 'prerequisites', 'faqs', 'chapters'])->where('slug', '=', $id)->first();
         //Make sure course is active
         if ((!Auth::guest() && Auth::user()->role == 'admin') || $course->active) {
 
             $favorited = false;
-            if (!Auth::guest()):
+            if (!Auth::guest()) {
                 $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)->first();
-            endif;
+            }
+
+            // load videos into chapters.
+            $chapters = $course->chapters()->with('lectures')->get();
 
             //$view_increment = $this->handleViewCount($id);
-
             $data = array(
                 'course' => $course,
+                'chapters' => $chapters,
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'view_increment' => true,
                 'favorited' => $favorited,

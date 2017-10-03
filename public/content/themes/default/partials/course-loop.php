@@ -1,7 +1,7 @@
 <?php foreach ($courses as $course): ?>
     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
         <article class="block">
-            <a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('course') : URL::to('course') ?><?= '/' . $course->id ?>">
+            <a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('course') : URL::to('course') ?><?= '/' . $course->slug ?>">
                 <div class="thumbnail-overlay"></div>
                 <span class="play-button"></span>
                 <img src="<?= ImageHandler::getImage($course->image, 'medium') ?>">

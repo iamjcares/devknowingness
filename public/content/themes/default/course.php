@@ -26,7 +26,59 @@
 
     <div class="video-details-container"><?= $course->detail ?></div>
 
+
+    <?php if (count($course->objectives) > 0): ?>
+        <div class="container">
+            <h3>What to learn?</h3>
+            <ul>
+                <?php foreach ($course->objectives as $key => $v): ?>
+                    <li> <?= $v->description ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+    <?php if (count($course->requirements) > 0): ?>
+        <div>
+            <h3>Requirements</h3>
+            <ul>
+                <?php foreach ($course->requirements as $key => $v): ?>
+                    <li> <?= $v->description ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+    <?php endif; ?>
+    <?php if (count($course->prerequisites) > 0): ?>
+        <div>
+            <h3>Prerequisites</h3>
+            <ul>
+                <?php foreach ($course->prerequisites as $key => $v): ?>
+                    <li> <?= $v->description ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+    <?php endif; ?>
+
+    <div class="row">
+        <h3>Curriculum</h3>
+        <?php include('partials/chapter-loop.php'); ?>
+    </div>
+
+    <?php if (count($course->faqs) > 0): ?>
+        <div>
+            <h3>FAQS</h3>
+            <ul>
+                <?php foreach ($course->faqs as $key => $v): ?>
+                    <li> <?= $v->title ?>? : <?= $v->description ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+    <?php endif; ?>
+
     <div class="clear"></div>
+
     <h2 id="tags">Tags:
         <?php foreach ($course->tags as $key => $tag): ?>
             <span><a href="/courses/tag/<?= $tag->name ?>"><?= $tag->name ?></a></span><?php if ($key + 1 != count($course->tags)): ?>,<?php endif; ?>

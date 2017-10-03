@@ -3,7 +3,8 @@
 use \Redirect as Redirect;
 use \HelloVideo\User as User;
 
-class ThemePostController extends \BaseController {
+class ThemePostController extends \BaseController
+{
 
     private $posts_per_page = 12;
 
@@ -23,36 +24,35 @@ class ThemePostController extends \BaseController {
     public function index($slug)
     {
         $post = Post::where('slug', '=', $slug)->first();
-        
+
         //Make sure post is active
-        if((!Auth::guest() && Auth::user()->role == 'admin') || $post->active){
+        if ((!Auth::guest() && Auth::user()->role == 'admin') || $post->active) {
 
             $author = User::find($post->user_id);
             $data = array(
-                    'post' => $post, 
-                    'author' => $author,
-                    'menu' => Menu::orderBy('order', 'ASC')->get(),
-                    'video_categories' => VideoCategory::all(),
-                    'post_categories' => PostCategory::all(),
-                    'theme_settings' => ThemeHelper::getThemeSettings(),
-                    'pages' => Page::all(),
-                );
+                'post' => $post,
+                'author' => $author,
+                'menu' => Menu::orderBy('order', 'ASC')->get(),
+                'course_categories' => CourseCategory::all(),
+                'post_categories' => PostCategory::all(),
+                'theme_settings' => ThemeHelper::getThemeSettings(),
+                'pages' => Page::all(),
+            );
             return View::make('Theme::post', $data);
-
         } else {
             return Redirect::to('posts')->with(array('note' => 'Sorry, this post is no longer active.', 'note_type' => 'error'));
         }
     }
 
-
     /*
      * Page That shows the latest posts list
      *
      */
+
     public function posts()
-    {   
+    {
         $page = Input::get('page');
-        if( !empty($page) ){
+        if (!empty($page)) {
             $page = Input::get('page');
         } else {
             $page = 1;
@@ -65,11 +65,11 @@ class ThemePostController extends \BaseController {
             'page_description' => 'Page ' . $page,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'pagination_url' => '/posts',
-            'video_categories' => VideoCategory::all(),
+            'course_categories' => CourseCategory::all(),
             'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::all(),
-            );
+        );
 
         return View::make('Theme::post-list', $data);
     }
@@ -77,7 +77,7 @@ class ThemePostController extends \BaseController {
     public function category($category)
     {
         $page = Input::get('page');
-        if( !empty($page) ){
+        if (!empty($page)) {
             $page = Input::get('page');
         } else {
             $page = 1;
@@ -92,7 +92,7 @@ class ThemePostController extends \BaseController {
             'page_description' => 'Page ' . $page,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'pagination_url' => '/posts/category/' . $category,
-            'video_categories' => VideoCategory::all(),
+            'course_categories' => CourseCategory::all(),
             'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::all(),
@@ -100,6 +100,5 @@ class ThemePostController extends \BaseController {
 
         return View::make('Theme::post-list', $data);
     }
-
 
 }
