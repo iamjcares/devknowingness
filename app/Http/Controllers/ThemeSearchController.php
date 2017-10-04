@@ -23,7 +23,11 @@ class ThemeSearchController extends BaseController
         if (empty($search_value)) {
             return Redirect::to('/');
         }
-        $courses = Course::where('active', '=', 1)->where('title', 'LIKE', '%' . $search_value . '%')->orderBy('created_at', 'desc')->get();
+        $courses = Course::where('active', '=', 1)
+                        ->where('title', 'LIKE', '%' . $search_value . '%')
+                        ->orWhere('description', 'LIKE', '%' . $search_value . '%')
+                        ->orWhere('detail', 'LIKE', '%' . $search_value . '%')
+                        ->orderBy('created_at', 'desc')->get();
         $posts = Post::where('active', '=', 1)->where('title', 'LIKE', '%' . $search_value . '%')->orderBy('created_at', 'desc')->get();
 
         $data = array(

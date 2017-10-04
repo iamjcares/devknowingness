@@ -48,7 +48,7 @@ class ThemeFavoriteController extends \BaseController
 
             $data = array(
                 'courses' => $courses,
-                'page_title' => ucfirst(Auth::user()->username) . '\'s Favorite Videos',
+                'page_title' => ucfirst(Auth::user()->username) . '\'s Favorite Courses',
                 'current_page' => $page,
                 'page_description' => 'Page ' . $page,
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -62,9 +62,7 @@ class ThemeFavoriteController extends \BaseController
             return View::make('Theme::course-list', $data);
 
         else:
-
             return Redirect::to('courses');
-
         endif;
     }
 

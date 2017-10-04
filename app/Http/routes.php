@@ -112,6 +112,20 @@ Route::group(array('before' => 'admin'), function() {
     // Admin Dashboard
     Route::get('admin', 'AdminController@index');
 
+    // Admin Course Functionality
+    Route::get('admin/courses', 'AdminCoursesController@index');
+    Route::get('admin/courses/edit/{id}', 'AdminCoursesController@edit');
+    Route::post('admin/courses/update', array('before' => 'demo', 'uses' => 'AdminCoursesController@update'));
+    Route::get('admin/courses/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCoursesController@destroy'));
+    Route::get('admin/courses/create', 'AdminCoursesController@create');
+    Route::post('admin/courses/store', array('before' => 'demo', 'uses' => 'AdminCoursesController@store'));
+    Route::get('admin/courses/categories', 'AdminCourseCategoriesController@index');
+    Route::post('admin/courses/categories/store', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@store'));
+    Route::post('admin/courses/categories/order', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@order'));
+    Route::get('admin/courses/categories/edit/{id}', 'AdminCourseCategoriesController@edit');
+    Route::post('admin/courses/categories/update', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@update'));
+    Route::get('admin/courses/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@destroy'));
+
     // Admin Video Functionality
     Route::get('admin/videos', 'AdminVideosController@index');
     Route::get('admin/videos/edit/{id}', 'AdminVideosController@edit');
