@@ -6,7 +6,7 @@ class Tag extends Eloquent
     protected $guarded = array();
     public static $rules = array();
 
-    public function videos()
+    public function courses()
     {
         return $this->belongsToMany('Course');
     }

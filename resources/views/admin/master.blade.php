@@ -41,7 +41,6 @@
                 <script src="https://oss.maxcdn.com/libs/respond.js') }}/1.4.2/respond.min.js') }}"></script>
         <![endif]-->
 
-
     </head>
     <body class="page-body skin-black">
 
@@ -104,7 +103,7 @@
                                 </li>
                                 <li>
                                     <a href="{{ URL::to('admin/courses/create') }}">
-                                        <span class="title">Add New Video</span>
+                                        <span class="title">Add New Course</span>
                                     </a>
                                 </li>
                                 <li>
@@ -237,10 +236,10 @@
                         <ul class="list-inline links-list pull-right">
 
                             <li>
-                                <span class="label label-warning" style="font-size:12px; background:#A8D432">Version 1.0.5</span>
+                                <span class="label label-warning" style="font-size:12px; background:#A8D432">Version 1.0.0</span>
                             </li>
                             <li>
-                                <a href="http://hellovideoapp.com/login" target="_blank">
+                                <a href="#" target="_blank">
                                     <span class="label label-danger" style="font-size:12px; background:#FC9A24">Updates <i class="entypo-download right"></i></span>
                                 </a>
                             </li>
@@ -275,7 +274,7 @@
                 <!-- Footer -->
                 <footer class="main">
 
-                    &copy; 2015 <strong>Hello Video</strong> Premium Video CMS
+                    &copy;  {{ date('Y')}} <strong>Knowingness</strong> Premium Video
 
                 </footer>
             </div>

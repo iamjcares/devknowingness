@@ -30,7 +30,7 @@
 
                 <header>
 
-                    <a href="{{ URL::to('course/') . '/' . $course->id }}" target="_blank">
+                    <a href="{{ URL::to('course/') . '/' . $course->slug }}" target="_blank">
                         <img src="{{ Config::get('site.uploads_dir') . 'images/' . $course->image }}" />
                     </a>
 
@@ -107,4 +107,3 @@ $(document).ready(function () {
 @stop
 
 @stop
-
