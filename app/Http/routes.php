@@ -67,8 +67,13 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function() {
       |--------------------------------------------------------------------------
      */
 
-    Route::get('login', 'ThemeAuthController@login_form');
+    Route::get('login', 'ThemeAuthController@social_form');
+    Route::get('mlogin', 'ThemeAuthController@login_form');
     Route::get('signup', 'ThemeAuthController@signup_form');
+    Route::get('social/login/redirect/{provider}', ['uses' => 'ThemeAuthController@redirectToProvider', 'as' => 'social.login'])
+            ->where('provider', 'facebook|twitter|google');
+    Route::get('social/login/{provider}', 'ThemeAuthController@handleProviderCallback')
+            ->where('provider', 'facebook|twitter|google');
     Route::post('login', 'ThemeAuthController@login');
     Route::post('signup', 'ThemeAuthController@signup');
 
@@ -126,20 +131,6 @@ Route::group(array('before' => 'admin'), function() {
     Route::post('admin/courses/categories/update', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@update'));
     Route::get('admin/courses/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@destroy'));
 
-    // Admin Video Functionality
-    Route::get('admin/videos', 'AdminVideosController@index');
-    Route::get('admin/videos/edit/{id}', 'AdminVideosController@edit');
-    Route::post('admin/videos/update', array('before' => 'demo', 'uses' => 'AdminVideosController@update'));
-    Route::get('admin/videos/delete/{id}', array('before' => 'demo', 'uses' => 'AdminVideosController@destroy'));
-    Route::get('admin/videos/create', 'AdminVideosController@create');
-    Route::post('admin/videos/store', array('before' => 'demo', 'uses' => 'AdminVideosController@store'));
-    Route::get('admin/videos/categories', 'AdminVideoCategoriesController@index');
-    Route::post('admin/videos/categories/store', array('before' => 'demo', 'uses' => 'AdminVideoCategoriesController@store'));
-    Route::post('admin/videos/categories/order', array('before' => 'demo', 'uses' => 'AdminVideoCategoriesController@order'));
-    Route::get('admin/videos/categories/edit/{id}', 'AdminVideoCategoriesController@edit');
-    Route::post('admin/videos/categories/update', array('before' => 'demo', 'uses' => 'AdminVideoCategoriesController@update'));
-    Route::get('admin/videos/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminVideoCategoriesController@destroy'));
-
     Route::get('admin/posts', 'AdminPostController@index');
     Route::get('admin/posts/create', 'AdminPostController@create');
     Route::post('admin/posts/store', array('before' => 'demo', 'uses' => 'AdminPostController@store'));
@@ -185,6 +176,9 @@ Route::group(array('before' => 'admin'), function() {
 
     Route::get('admin/payment_settings', 'AdminPaymentSettingsController@index');
     Route::post('admin/payment_settings', array('before' => 'demo', 'uses' => 'AdminPaymentSettingsController@save_payment_settings'));
+
+    Route::get('admin/social_settings', 'AdminSocialSettingsController@index');
+    Route::post('admin/social_settings', array('before' => 'demo', 'uses' => 'AdminSocialSettingsController@save_social_settings'));
 
     Route::get('admin/theme_settings_form', 'AdminThemeSettingsController@theme_settings_form');
     Route::get('admin/theme_settings', 'AdminThemeSettingsController@theme_settings');

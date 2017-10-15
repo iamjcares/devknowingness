@@ -8,7 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="HelloVideo Admin Panel" />
+        <meta name="description" content="Knowingness Admin Panel" />
         <meta name="author" content="" />
 
         <title>{{ $settings->website_name . ' - ' . $settings->website_description }}</title>
@@ -194,6 +194,11 @@
                                     </a>
                                 </li>
                                 <li class="">
+                                    <a href="{{ URL::to('admin/social_settings') }}">
+                                        <span class="title">Social Login Settings</span>
+                                    </a>
+                                </li>
+                                <li class="">
                                     <a href="{{ URL::to('admin/payment_settings') }}">
                                         <span class="title">Payment Settings</span>
                                     </a>
@@ -205,8 +210,6 @@
                                 </li>
                             </ul>
                         </li>
-
-
                     </ul>
 
                 </div>
@@ -224,7 +227,7 @@
                             <!-- Profile Info -->
                             <li class="profile"><!-- add class "pull-right" if you want to place this from right -->
                                 <img src="{{ Config::get('site.uploads_dir') . 'avatars/' . $admin_user->avatar }}" alt="" class="img-circle" width="26" />
-                                <span>Howdy, {{ ucfirst($admin_user->username) }}</span>
+                                <span>Howdy, {{ ucfirst($admin_user->name) }}</span>
                             </li>
                         </ul>
                     </div>

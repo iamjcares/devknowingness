@@ -5,6 +5,8 @@ use \HelloVideo\User as User;
 use \Redirect as Redirect;
 use Illuminate\Contracts\Auth\PasswordBroker;
 
+//use Socialite;
+
 class ThemeAuthController extends BaseController
 {
 
@@ -26,6 +28,22 @@ class ThemeAuthController extends BaseController
         }
         $data = array(
             'type' => 'login',
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'course_categories' => CourseCategory::all(),
+            'post_categories' => PostCategory::all(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'pages' => Page::all(),
+        );
+        return View::make('Theme::auth', $data);
+    }
+
+    public function social_form()
+    {
+        if (!Auth::guest()) {
+            return Redirect::to('/');
+        }
+        $data = array(
+            'type' => 'social_login',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'course_categories' => CourseCategory::all(),
             'post_categories' => PostCategory::all(),
@@ -104,7 +122,7 @@ class ThemeAuthController extends BaseController
 
         $token = Input::get('stripeToken');
 
-        $user_data = array('username' => Input::get('username'), 'email' => Input::get('email'), 'password' => Hash::make(Input::get('password')));
+        $user_data = array('name' => Input::get('name'), 'username' => Input::get('username'), 'email' => Input::get('email'), 'password' => Hash::make(Input::get('password')));
 
         $input = Input::all();
         unset($input['stripeToken']);
@@ -112,23 +130,53 @@ class ThemeAuthController extends BaseController
         $validation = Validator::make($input, User::$rules);
 
         if ($validation->fails()) {
-            //echo $validation->messages();
-            //print_r($validation->errors()); die();
-            return Redirect::to('/signup')->with(array('note' => 'Sorry, there was an error creating your account.', 'note_type' => 'error', 'messages'))->withErrors($validation)->withInput(\Request::only('username', 'email'));
+            return Redirect::to('/signup')->with(array('note' => 'Sorry, there was an error creating your account.', 'note_type' => 'error', 'messages'))->withErrors($validation)->withInput(\Request::only('name', 'username', 'email'));
         }
 
         $user = new User($user_data);
         $user->save();
 
-        try {
-            $user->subscription('monthly')->create($token, ['email' => $user->email]);
-            Auth::loginUsingId($user->id);
-            return Redirect::to('/')->with(array('note' => 'Welcome! Your Account has been Successfully Created!', 'note_type' => 'success'));
-        } catch (Exception $e) {
-            Auth::logout();
-            $user->delete();
-            return Redirect::to('/signup')->with(array('note' => 'Sorry, there was an error with your card: ' . $e->getMessage(), 'note_type' => 'error'))->withInput(\Request::only('username', 'email'));
+        Auth::loginUsingId($user->id);
+        return Redirect::to('/')->with(array('note' => 'Welcome! Your Account has been Successfully Created!', 'note_type' => 'success'));
+    }
+
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
+
+    public function handleProviderCallback($provider)
+    {
+
+        $user_detail = Socialite::driver($provider)->stateless()->user();
+        $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
+
+        $username = str_replace(' ', '_', $user_detail->getNickname());
+        if (empty($username)) {
+            $username = $user_detail->getEmail();
         }
+        $data = [
+            'email' => $user_detail->getEmail()
+        ];
+
+        Auth::login(User::firstOrCreate($data));
+
+        $user = Auth::user();
+        $user->name = ($user->name) ? : $user_detail->getName();
+        $user->username = ($user->username) ? : $username;
+        $user->confirmed = 1;
+        $user->provider = $provider;
+        $avatar = $user_detail->getAvatar();
+        if (!empty($avatar)) {
+            $user->avatar = ImageHandler::uploadImage($avatar, 'avatars', $user->username, 'url');
+        }
+        $user->save();
+
+        $profile = $user->profile ? : new Profile();
+        $profile->user()->associate($user);
+        $profile->photo = $user->avatar;
+        $profile->save();
+        return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
     }
 
     public function logout()

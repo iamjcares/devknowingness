@@ -12,6 +12,9 @@ CREATE TABLE `settings` (
   `google_page_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `twitter_page_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `youtube_page_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `enable_facebook_login` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_google_login` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_twitter_login` tinyint(1) NOT NULL DEFAULT '0',
   `google_tracking_id` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `google_oauth_key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -166,3 +169,49 @@ CREATE TABLE `lectures` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) COLLATE utf8_unicode_ci NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NULL,
+  `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default.jpg',
+  `password` varchar(255) COLLATE utf8_unicode_ci NULL,
+  `role` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'subscriber',
+  `provider` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_login` timestamp NULL DEFAULT NULL,
+  `last_login_ip` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `last_login_now` timestamp NULL DEFAULT NULL,
+  `last_login_ip_now` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `activation_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `confirmed` int(1) NOT NULL DEFAULT '0',
+  `remember_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `stripe_active` tinyint(4) NOT NULL DEFAULT '0',
+  `stripe_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `stripe_subscription` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `stripe_plan` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `last_four` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `trial_ends_at` timestamp NULL DEFAULT NULL,
+  `subscription_ends_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`username`),
+  UNIQUE KEY `uniuqe_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `profiles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `photo` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `contact_number` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `alternate_contact_number` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `alternate_email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address` text COLLATE utf8_unicode_ci,
+  `timezone_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

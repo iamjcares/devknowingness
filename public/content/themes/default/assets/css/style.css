@@ -1690,3 +1690,11 @@ Navbar Toggle
     margin-bottom: 25px;
   }
 }
+
+/* === BUTTONS AND ICONS COLOR === */
+.btn-facebook{background: #45619D;border-color: #4D6CAD; color: #fff;}
+.btn-facebook:hover{background: #395289;border-color: #4D6CAD; color: #fff;}
+.btn-twitter{background: #00ACEE;border-color: #00B7FC; color: #fff;}
+.btn-twitter:hover{background: #03A0DE;border-color: #00B7FC; color: #fff;}
+.btn-gplus{background: #D54636;border-color: #B22E21; color: #fff;}
+.btn-gplus:hover{background: #BF392E;border-color: #B22E21; color: #fff;}

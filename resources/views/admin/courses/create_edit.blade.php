@@ -23,23 +23,27 @@
     <div class="clear"></div>
     <form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
-        @if(!empty($course->created_at))
         <div class="row">
-            <div class="col-md-9">
-                @endif
+            <div class="@if(!empty($course->created_at)) col-sm-6 @else col-sm-8 @endif">
+
                 <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
                         <div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
                     <div class="panel-body" style="display: block;">
                         <p>Add the course title in the textbox below:</p>
                         <input type="text" class="form-control" name="title" id="title" placeholder="Course Title" value="@if(!empty($course->title)){{ $course->title }}@endif" />
-                        <p>Add the course slug in the textbox below:</p>
-                        <input type="text" class="form-control" name="slug" id="slug" placeholder="course-slug" value="@if(!empty($course->slug)){{ $course->slug }}@endif" />
                     </div>
                 </div>
-
-                @if(!empty($course->created_at))
-
             </div>
+            <div class="@if(!empty($course->created_at)) col-sm-3 @else col-sm-4 @endif">
+                <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+                        <div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+                    <div class="panel-body" style="display: block;">
+                        <p>(example. /course/slug-name)</p>
+                        <input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($course->slug)){{ $course->slug }}@endif" />
+                    </div>
+                </div>
+            </div>
+            @if(!empty($course->created_at))
             <div class="col-sm-3">
                 <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
                         <div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
@@ -49,8 +53,9 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
-        @endif
+
 
 
         <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">

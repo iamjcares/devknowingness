@@ -63,10 +63,7 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::filter('if_logged_in_must_be_subscribed', function() {
             if (!Auth::guest()) {
-                if (!Auth::user()->subscribed() && Auth::user()->role == 'subscriber') {
-                    $username = Auth::user()->username;
-                    return Redirect::to('user/' . $username . '/renew_subscription')->with(array('note' => 'Uh oh, looks like you don\'t have an active subscription, please renew to gain access to all content', 'note_type' => 'error'));
-                }
+
             }
         });
 

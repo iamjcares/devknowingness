@@ -31,9 +31,8 @@
                             <li class="signup-desktop"><a href="/signup"> Signup</a></li>
 
                         <?php else: ?>
-
                             <li class="dropdown">
-                                <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->username) ?> <i class="fa fa-chevron-down"></i></a>
+                                <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->name) ?> <i class="fa fa-chevron-down"></i></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
                                     <li><a href="<?= ($settings->enable_https) ? secure_url('favorites') : URL::to('favorites') ?>">My Favorites</a></li>
