@@ -131,6 +131,7 @@ return [
         'Intervention\Image\ImageServiceProvider',
         'Laravel\Cashier\CashierServiceProvider',
         'Laravel\Socialite\SocialiteServiceProvider',
+        Zizaco\Entrust\EntrustServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -177,6 +178,7 @@ return [
         'Validator' => 'Illuminate\Support\Facades\Validator',
         'View' => 'Illuminate\Support\Facades\View',
         'Image' => 'Intervention\Image\Facades\Image',
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Entrust' => Zizaco\Entrust\EntrustFacade::class,
     ],
 ];

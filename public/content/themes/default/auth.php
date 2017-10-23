@@ -25,7 +25,7 @@
             <a href="<?= route('social.login', ['twitter']) ?>" class="btn btn-block btn-lg btn-twitter"><i class="fa fa-twitter"></i> Login with Twitter</a>
         <?php endif; ?>
         <p class="text-center"><strong>- or -</strong></p>
-        <a href="<?= ($settings->enable_https) ? secure_url('mlogin') : URL::to('mlogin') ?>" class="btn btn-primary btn-block btn-lg">Username/Password</a>
+        <a id="native_login" href="<?= ($settings->enable_https) ? secure_url('mlogin') : URL::to('mlogin') ?>" class="btn btn-primary btn-block btn-lg">Username/Password</a>
 
     </div>
 

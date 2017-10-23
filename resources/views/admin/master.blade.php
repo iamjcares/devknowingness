@@ -114,6 +114,29 @@
                             </ul>
                         </li>
                         <li class="">
+                            <a href="{{ URL::to('admin/roles') }}">
+                                <i class="entypo-users"></i>
+                                <span class="title">Roles & Permissions</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="{{ URL::to('admin/roles') }}">
+                                        <span class="title">All Roles</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ URL::to('admin/permissions') }}">
+                                        <span class="title">All Permissions</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ URL::to('admin/permission/role') }}">
+                                        <span class="title">Role's Permission</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="">
                             <a href="{{ URL::to('admin/users') }}">
                                 <i class="entypo-users"></i>
                                 <span class="title">Users</span>

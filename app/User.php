@@ -9,13 +9,15 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Contracts\Billable as BillableContract;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract, BillableContract
 {
 
     use Authenticatable,
         CanResetPassword,
-        Billable;
+        Billable,
+        EntrustUserTrait;
 
     /**
      * The database table used by the model.

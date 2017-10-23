@@ -159,6 +159,20 @@ Route::group(array('before' => 'admin'), function() {
     Route::post('admin/user/update', array('before' => 'demo', 'uses' => 'AdminUsersController@update'));
     Route::get('admin/user/delete/{id}', array('before' => 'demo', 'uses' => 'AdminUsersController@destroy'));
 
+    Route::get('admin/roles', 'AdminRolePermissionsController@index');
+    Route::post('admin/role/store', 'AdminRolePermissionsController@storeRole');
+    Route::get('admin/role/edit/{id}', 'AdminRolePermissionsController@editRole');
+    Route::post('admin/role/update', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@updateRole'));
+    Route::get('admin/role/delete/{id}', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@destroyRole'));
+
+    Route::get('admin/permissions', 'AdminRolePermissionsController@permission');
+    Route::post('admin/permission/store', 'AdminRolePermissionsController@storePermission');
+    Route::get('admin/permission/edit/{id}', 'AdminRolePermissionsController@editPermission');
+    Route::post('admin/permission/update', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@updatePermission'));
+    Route::get('admin/permission/delete/{id}', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@destroyPermission'));
+    Route::get('admin/permission/role', 'AdminRolePermissionsController@permission_role');
+    Route::post('admin/permission/role/store', 'AdminRolePermissionsController@savePermission');
+
     Route::get('admin/menu', 'AdminMenuController@index');
     Route::post('admin/menu/store', array('before' => 'demo', 'uses' => 'AdminMenuController@store'));
     Route::get('admin/menu/edit/{id}', 'AdminMenuController@edit');

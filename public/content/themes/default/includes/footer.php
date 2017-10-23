@@ -119,11 +119,19 @@
 
         });
 
-
-
-
+        $('body').on('click', '#native_login', function (e) {
+            if ($('#loginSignupModal .modal-body').length !== 0) {
+                e.preventDefault();
+                $('#loginSignupModal .modal-body').load($(this).attr('href') + '?redirect=' + document.URL + ' .form-signin', function () {
+                    $('#loginSignupModal').show(200, function () {
+                        setTimeout(function () {
+                            $('#email').focus()
+                        }, 300);
+                    });
+                });
+            }
+        });
     });
-
     /********** END LOGIN MODAL FUNCTIONALITY **********/
 
 </script>
