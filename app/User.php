@@ -5,18 +5,20 @@ namespace HelloVideo;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
+//use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Laravel\Cashier\Billable;
-use Laravel\Cashier\Contracts\Billable as BillableContract;
+//use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract, BillableContract
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
 
     use Authenticatable,
+//        Authorizable,
         CanResetPassword,
-        Billable,
+        Notifiable,
         EntrustUserTrait;
 
     /**

@@ -79,6 +79,7 @@ class AdminRolePermissionsController extends \BaseController
 
         $perms = Permission::orderBy('category')->get();
         $roles = Role::all();
+        // the list here might later use collection or add ->all();
         $permission_role = DB::table('permission_role')
                 ->select(DB::raw('CONCAT(role_id,"-",permission_id) AS detail'))
                 ->lists('detail');

@@ -3,7 +3,6 @@
 namespace HelloVideo\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Contracts\Foundation\Application;
 use \Setting as Setting;
 
@@ -15,7 +14,7 @@ use \Setting as Setting;
  * @param $next The next closure.
  * @return redirects to the secure counterpart of the requested uri.
  */
-class Secure implements Middleware
+class Secure
 {
 
     protected $app;

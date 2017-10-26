@@ -28,9 +28,9 @@ class RouteServiceProvider extends ServiceProvider
      * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function boot(Router $router)
+    public function boot()
     {
-        parent::boot($router);
+        parent::boot();
 
         //
         $settings = \Setting::first();
@@ -50,41 +50,6 @@ class RouteServiceProvider extends ServiceProvider
 
         @include( $root_dir . 'content/themes/' . $theme . '/functions.php');
         View::addNamespace('Theme', $root_dir . 'content/themes/' . $theme);
-
-        Route::filter('auth', function() {
-            if (Auth::guest())
-                return Redirect::guest('login');
-        });
-
-
-        Route::filter('auth.basic', function() {
-            return Auth::basic();
-        });
-
-        Route::filter('if_logged_in_must_be_subscribed', function() {
-            if (!Auth::guest()) {
-
-            }
-        });
-
-        Route::filter('admin', function() {
-            if (!Auth::guest() && (Auth::user()->role == 'admin' || Auth::user()->role == 'demo')) {
-
-            } else {
-                return Redirect::to('/login');
-            }
-        });
-
-        Route::filter('demo', function() {
-            if (!Auth::guest() && Auth::user()->role == 'demo') {
-                return Redirect::back()->with(array('note' => 'Sorry, unfortunately this functionality is not available in demo accounts', 'note_type' => 'error'));
-            }
-        });
-
-        Route::filter('guest', function() {
-            if (Auth::check())
-                return Redirect::to('/');
-        });
     }
 
     /**

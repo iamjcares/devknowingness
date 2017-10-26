@@ -1,34 +1,31 @@
-<?php namespace HelloVideo\Providers;
+<?php
 
-use Illuminate\Bus\Dispatcher;
+namespace HelloVideo\Providers;
+
 use Illuminate\Support\ServiceProvider;
 
-class BusServiceProvider extends ServiceProvider {
+class BusServiceProvider extends ServiceProvider
+{
 
-	/**
-	 * Bootstrap any application services.
-	 *
-	 * @param  \Illuminate\Bus\Dispatcher  $dispatcher
-	 * @return void
-	 */
-	public function boot(Dispatcher $dispatcher)
-	{
-		$dispatcher->mapUsing(function($command)
-		{
-			return Dispatcher::simpleMapping(
-				$command, 'HelloVideo\Commands', 'HelloVideo\Handlers\Commands'
-			);
-		});
-	}
+    /**
+     * Bootstrap any application services.
+     *
+     * @param  \Illuminate\Bus\Dispatcher  $dispatcher
+     * @return void
+     */
+    public function boot()
+    {
 
-	/**
-	 * Register any application services.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		//
-	}
+    }
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
 
 }

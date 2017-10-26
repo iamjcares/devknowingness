@@ -14,6 +14,7 @@ class ThemeAuthController extends BaseController
     public function __construct()
     {
         $this->middleware('secure');
+        $this->middleware('guest', ['except' => 'logout']);
     }
 
     /*
@@ -24,9 +25,10 @@ class ThemeAuthController extends BaseController
 
     public function login_form()
     {
-        if (!Auth::guest()) {
-            return Redirect::to('/');
-        }
+        $this->middleware('guest');
+//        if (!Auth::guest()) {
+//            return Redirect::to('/');
+//        }
         $data = array(
             'type' => 'login',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -56,9 +58,10 @@ class ThemeAuthController extends BaseController
 
     public function signup_form()
     {
-        if (!Auth::guest()) {
-            return Redirect::to('/');
-        }
+        $this->middleware('guest');
+//        if (!Auth::guest()) {
+//            return Redirect::to('/');
+//        }
         $data = array(
             'type' => 'signup',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -176,7 +179,7 @@ class ThemeAuthController extends BaseController
     public function logout()
     {
         Auth::logout();
-        return Redirect::back()->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
+        return Redirect::to('/')->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
     }
 
     // ********** RESET PASSWORD ********** //
