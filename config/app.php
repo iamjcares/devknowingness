@@ -150,7 +150,7 @@ return [
         'HelloVideo\Providers\EventServiceProvider',
         'HelloVideo\Providers\RouteServiceProvider',
         'Intervention\Image\ImageServiceProvider',
-        'Laravel\Socialite\SocialiteServiceProvider',
+        Laravel\Socialite\SocialiteServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
     ],
     /*

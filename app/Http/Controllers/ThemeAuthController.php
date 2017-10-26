@@ -26,9 +26,6 @@ class ThemeAuthController extends BaseController
     public function login_form()
     {
         $this->middleware('guest');
-//        if (!Auth::guest()) {
-//            return Redirect::to('/');
-//        }
         $data = array(
             'type' => 'login',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
