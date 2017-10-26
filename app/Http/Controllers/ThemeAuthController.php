@@ -1,7 +1,8 @@
 <?php
 
 use \Auth as Auth;
-use \HelloVideo\User as User;
+use \HelloVideo\User;
+use \HelloVideo\Role;
 use \Redirect as Redirect;
 use Illuminate\Contracts\Auth\PasswordBroker;
 
@@ -55,7 +56,6 @@ class ThemeAuthController extends BaseController
 
     public function signup_form()
     {
-
         if (!Auth::guest()) {
             return Redirect::to('/');
         }
@@ -86,22 +86,14 @@ class ThemeAuthController extends BaseController
         );
 
         if (Auth::attempt($email_login) || Auth::attempt($username_login)) {
+            $user = Auth::user();
+            if (!$user->hasRole('user')) {
+                $userRole = Role::where('name', '=', 'user')->first();
+                $user->attachRole($userRole);
+            }
 
-            //dd(Auth::user());
-
-            if (Auth::user()->subscribed() || (Auth::user()->role == 'admin' || Auth::user()->role == 'demo')):
-
-                $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
-                if (Auth::user()->role == 'demo' && Setting::first()->demo_mode != 1) {
-                    Auth::logout();
-                    return Redirect::to($redirect)->with(array('note' => 'Sorry, Demo Mode has been disabled', 'note_type' => 'error'));
-                } else {
-                    return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
-                }
-            else:
-                $username = Auth::user()->username;
-                return Redirect::to('user/' . $username . '/renew_subscription')->with(array('note' => 'Uh oh, looks like you don\'t have an active subscription, please renew to gain access to all content', 'note_type' => 'error'));
-            endif;
+            $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
+            return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
         } else {
 
             $redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
@@ -112,20 +104,10 @@ class ThemeAuthController extends BaseController
 
     public function signup()
     {
-        $payment_settings = PaymentSetting::first();
-
-        if ($payment_settings->live_mode) {
-            User::setStripeKey($payment_settings->live_secret_key);
-        } else {
-            User::setStripeKey($payment_settings->test_secret_key);
-        }
-
-        $token = Input::get('stripeToken');
 
         $user_data = array('name' => Input::get('name'), 'username' => Input::get('username'), 'email' => Input::get('email'), 'password' => Hash::make(Input::get('password')));
 
         $input = Input::all();
-        unset($input['stripeToken']);
 
         $validation = Validator::make($input, User::$rules);
 
@@ -134,7 +116,9 @@ class ThemeAuthController extends BaseController
         }
 
         $user = new User($user_data);
+        $userRole = Role::where('name', '=', 'user')->first();
         $user->save();
+        $user->attachRole($userRole);
 
         Auth::loginUsingId($user->id);
         return Redirect::to('/')->with(array('note' => 'Welcome! Your Account has been Successfully Created!', 'note_type' => 'success'));
@@ -151,31 +135,41 @@ class ThemeAuthController extends BaseController
         $user_detail = Socialite::driver($provider)->stateless()->user();
         $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
 
-        $username = str_replace(' ', '_', $user_detail->getNickname());
-        if (empty($username)) {
-            $username = $user_detail->getEmail();
-        }
-        $data = [
-            'email' => $user_detail->getEmail()
-        ];
-
+        $data = ['email' => $user_detail->getEmail()];
         Auth::login(User::firstOrCreate($data));
-
         $user = Auth::user();
-        $user->name = ($user->name) ? : $user_detail->getName();
-        $user->username = ($user->username) ? : $username;
-        $user->confirmed = 1;
-        $user->provider = $provider;
-        $avatar = $user_detail->getAvatar();
-        if (!empty($avatar)) {
-            $user->avatar = ImageHandler::uploadImage($avatar, 'avatars', $user->username, 'url');
-        }
-        $user->save();
 
-        $profile = $user->profile ? : new Profile();
-        $profile->user()->associate($user);
-        $profile->photo = $user->avatar;
-        $profile->save();
+        if (intval($user->confirmed) === 1) {
+            // user already exist
+            if (!$user->hasRole('user')) {
+                $userRole = Role::where('name', '=', 'user')->first();
+                $user->attachRole($userRole);
+            }
+        } else {
+            $user->name = $user_detail->getName();
+            $username = str_replace(' ', '_', $user_detail->getNickname());
+            if (empty($username)) {
+                $username = $user_detail->getEmail();
+            }
+            $user->username = $username;
+            $userRole = Role::where('name', '=', 'user')->first();
+            $user->attachRole($userRole);
+            $user->confirmed = 1;
+            $user->provider = $provider;
+            $avatar = $user_detail->getAvatar();
+            if (!empty($avatar)) {
+                $user->avatar = ImageHandler::uploadImage($avatar, 'avatars', $user->username, 'url');
+            }
+            $user->save();
+
+            // creating a profile for the new user!
+            $profile = $user->profile ? : new Profile();
+            $profile->user()->associate($user);
+            $profile->photo = $user->avatar;
+            $profile->save();
+            return Redirect::to($redirect)->with(array('note' => 'Welcome! Your Account has been Successfully Created!', 'note_type' => 'success'));
+        }
+
         return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
     }
 

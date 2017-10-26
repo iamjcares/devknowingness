@@ -1,7 +1,6 @@
 <?php
 
-Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function() {
-
+Route::group([], function() {
     /*
       |--------------------------------------------------------------------------
       | Home Page Routes
@@ -20,17 +19,6 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function() {
     Route::get('courses/category/{category}', 'ThemeCourseController@category');
     Route::get('courses/tag/{tag}', 'ThemeCourseController@tag');
     Route::get('course/{id}', 'ThemeCourseController@index');
-
-
-    /*
-      |--------------------------------------------------------------------------
-      | Favorite Routes
-      |--------------------------------------------------------------------------
-     */
-
-    Route::post('favorite', 'ThemeFavoriteController@favorite');
-    Route::get('favorites', 'ThemeFavoriteController@show_favorites');
-
 
     /*
       |--------------------------------------------------------------------------
@@ -61,6 +49,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function() {
 
     Route::get('search', 'ThemeSearchController@index');
 
+
     /*
       |--------------------------------------------------------------------------
       | Auth and Password Reset Routes
@@ -81,8 +70,23 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function() {
     Route::post('password/reset', array('before' => 'demo', 'uses' => 'ThemeAuthController@password_request', 'as' => 'password.request'));
     Route::get('password/reset/{token}', array('before' => 'demo', 'uses' => 'ThemeAuthController@password_reset_token', 'as' => 'password.reset'));
     Route::post('password/reset/{token}', array('before' => 'demo', 'uses' => 'ThemeAuthController@password_reset_post', 'as' => 'password.update'));
+});
 
-    //Route::controller('password', 'PasswordController');
+Route::group([], function() {
+
+});
+
+
+
+Route::group(['middleware' => ['role:user']], function() {
+    /*
+      |--------------------------------------------------------------------------
+      | Favorite Routes
+      |--------------------------------------------------------------------------
+     */
+
+    Route::post('favorite', 'ThemeFavoriteController@favorite');
+    Route::get('favorites', 'ThemeFavoriteController@show_favorites');
 
     /*
       |--------------------------------------------------------------------------
@@ -92,15 +96,13 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function() {
 
     Route::get('user/{username}', 'ThemeUserController@index');
     Route::get('user/{username}/edit', 'ThemeUserController@edit');
-    Route::post('user/{username}/update', array('before' => 'demo', 'uses' => 'ThemeUserController@update'));
-    Route::get('user/{username}/billing', array('before' => 'demo', 'uses' => 'ThemeUserController@billing'));
-    Route::get('user/{username}/cancel', array('before' => 'demo', 'uses' => 'ThemeUserController@cancel_account'));
-    Route::get('user/{username}/resume', array('before' => 'demo', 'uses' => 'ThemeUserController@resume_account'));
+    Route::post('user/{username}/update', 'ThemeUserController@update');
+    Route::get('user/{username}/cancel', 'ThemeUserController@cancel_account');
+    Route::get('user/{username}/resume', 'ThemeUserController@resume_account');
     Route::get('user/{username}/update_cc', 'ThemeUserController@update_cc');
-}); // End if_logged_in_must_be_subscribed route
+});
 
-Route::get('user/{username}/renew_subscription', 'ThemeUserController@renew');
-Route::post('user/{username}/update_cc', array('before' => 'demo', 'uses' => 'ThemeUserController@update_cc_store'));
+
 Route::get('logout', 'ThemeAuthController@logout');
 
 Route::get('upgrade', 'UpgradeController@upgrade');
@@ -112,91 +114,90 @@ Route::get('upgrade', 'UpgradeController@upgrade');
   |--------------------------------------------------------------------------
  */
 
-Route::group(array('before' => 'admin'), function() {
-
+Route::group(['prefix' => 'admin', 'middleware' => ['role:admin']], function() {
     // Admin Dashboard
-    Route::get('admin', 'AdminController@index');
+    Route::get('/', 'AdminController@index');
 
     // Admin Course Functionality
-    Route::get('admin/courses', 'AdminCoursesController@index');
-    Route::get('admin/courses/edit/{id}', 'AdminCoursesController@edit');
-    Route::post('admin/courses/update', array('before' => 'demo', 'uses' => 'AdminCoursesController@update'));
-    Route::get('admin/courses/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCoursesController@destroy'));
-    Route::get('admin/courses/create', 'AdminCoursesController@create');
-    Route::post('admin/courses/store', array('before' => 'demo', 'uses' => 'AdminCoursesController@store'));
-    Route::get('admin/courses/categories', 'AdminCourseCategoriesController@index');
-    Route::post('admin/courses/categories/store', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@store'));
-    Route::post('admin/courses/categories/order', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@order'));
-    Route::get('admin/courses/categories/edit/{id}', 'AdminCourseCategoriesController@edit');
-    Route::post('admin/courses/categories/update', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@update'));
-    Route::get('admin/courses/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@destroy'));
+    Route::get('courses', 'AdminCoursesController@index');
+    Route::get('courses/edit/{id}', 'AdminCoursesController@edit');
+    Route::post('courses/update', array('before' => 'demo', 'uses' => 'AdminCoursesController@update'));
+    Route::get('courses/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCoursesController@destroy'));
+    Route::get('courses/create', 'AdminCoursesController@create');
+    Route::post('courses/store', array('before' => 'demo', 'uses' => 'AdminCoursesController@store'));
+    Route::get('courses/categories', 'AdminCourseCategoriesController@index');
+    Route::post('courses/categories/store', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@store'));
+    Route::post('courses/categories/order', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@order'));
+    Route::get('courses/categories/edit/{id}', 'AdminCourseCategoriesController@edit');
+    Route::post('courses/categories/update', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@update'));
+    Route::get('courses/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCourseCategoriesController@destroy'));
 
-    Route::get('admin/posts', 'AdminPostController@index');
-    Route::get('admin/posts/create', 'AdminPostController@create');
-    Route::post('admin/posts/store', array('before' => 'demo', 'uses' => 'AdminPostController@store'));
-    Route::get('admin/posts/edit/{id}', 'AdminPostController@edit');
-    Route::post('admin/posts/update', array('before' => 'demo', 'uses' => 'AdminPostController@update'));
-    Route::get('admin/posts/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPostController@destroy'));
-    Route::get('admin/posts/categories', 'AdminPostCategoriesController@index');
-    Route::post('admin/posts/categories/store', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@store'));
-    Route::post('admin/posts/categories/order', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@order'));
-    Route::get('admin/posts/categories/edit/{id}', 'AdminPostCategoriesController@edit');
-    Route::get('admin/posts/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@destroy'));
-    Route::post('admin/posts/categories/update', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@update'));
+    Route::get('posts', 'AdminPostController@index');
+    Route::get('posts/create', 'AdminPostController@create');
+    Route::post('posts/store', array('before' => 'demo', 'uses' => 'AdminPostController@store'));
+    Route::get('posts/edit/{id}', 'AdminPostController@edit');
+    Route::post('posts/update', array('before' => 'demo', 'uses' => 'AdminPostController@update'));
+    Route::get('posts/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPostController@destroy'));
+    Route::get('posts/categories', 'AdminPostCategoriesController@index');
+    Route::post('posts/categories/store', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@store'));
+    Route::post('posts/categories/order', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@order'));
+    Route::get('posts/categories/edit/{id}', 'AdminPostCategoriesController@edit');
+    Route::get('posts/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@destroy'));
+    Route::post('posts/categories/update', array('before' => 'demo', 'uses' => 'AdminPostCategoriesController@update'));
 
-    Route::get('admin/pages', 'AdminPageController@index');
-    Route::get('admin/pages/create', 'AdminPageController@create');
-    Route::post('admin/pages/store', array('before' => 'demo', 'uses' => 'AdminPageController@store'));
-    Route::get('admin/pages/edit/{id}', 'AdminPageController@edit');
-    Route::post('admin/pages/update', array('before' => 'demo', 'uses' => 'AdminPageController@update'));
-    Route::get('admin/pages/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPageController@destroy'));
+    Route::get('pages', 'AdminPageController@index');
+    Route::get('pages/create', 'AdminPageController@create');
+    Route::post('pages/store', array('before' => 'demo', 'uses' => 'AdminPageController@store'));
+    Route::get('pages/edit/{id}', 'AdminPageController@edit');
+    Route::post('pages/update', array('before' => 'demo', 'uses' => 'AdminPageController@update'));
+    Route::get('pages/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPageController@destroy'));
 
 
-    Route::get('admin/users', 'AdminUsersController@index');
-    Route::get('admin/user/create', 'AdminUsersController@create');
-    Route::post('admin/user/store', array('before' => 'demo', 'uses' => 'AdminUsersController@store'));
-    Route::get('admin/user/edit/{id}', 'AdminUsersController@edit');
-    Route::post('admin/user/update', array('before' => 'demo', 'uses' => 'AdminUsersController@update'));
-    Route::get('admin/user/delete/{id}', array('before' => 'demo', 'uses' => 'AdminUsersController@destroy'));
+    Route::get('users', 'AdminUsersController@index');
+    Route::get('user/create', 'AdminUsersController@create');
+    Route::post('user/store', array('before' => 'demo', 'uses' => 'AdminUsersController@store'));
+    Route::get('user/edit/{id}', 'AdminUsersController@edit');
+    Route::post('user/update', array('before' => 'demo', 'uses' => 'AdminUsersController@update'));
+    Route::get('user/delete/{id}', array('before' => 'demo', 'uses' => 'AdminUsersController@destroy'));
 
-    Route::get('admin/roles', 'AdminRolePermissionsController@index');
-    Route::post('admin/role/store', 'AdminRolePermissionsController@storeRole');
-    Route::get('admin/role/edit/{id}', 'AdminRolePermissionsController@editRole');
-    Route::post('admin/role/update', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@updateRole'));
-    Route::get('admin/role/delete/{id}', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@destroyRole'));
+    Route::get('roles', 'AdminRolePermissionsController@index');
+    Route::post('role/store', 'AdminRolePermissionsController@storeRole');
+    Route::get('role/edit/{id}', 'AdminRolePermissionsController@editRole');
+    Route::post('role/update', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@updateRole'));
+    Route::get('role/delete/{id}', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@destroyRole'));
 
-    Route::get('admin/permissions', 'AdminRolePermissionsController@permission');
-    Route::post('admin/permission/store', 'AdminRolePermissionsController@storePermission');
-    Route::get('admin/permission/edit/{id}', 'AdminRolePermissionsController@editPermission');
-    Route::post('admin/permission/update', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@updatePermission'));
-    Route::get('admin/permission/delete/{id}', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@destroyPermission'));
-    Route::get('admin/permission/role', 'AdminRolePermissionsController@permission_role');
-    Route::post('admin/permission/role/store', 'AdminRolePermissionsController@savePermission');
+    Route::get('permissions', 'AdminRolePermissionsController@permission');
+    Route::post('permission/store', 'AdminRolePermissionsController@storePermission');
+    Route::get('permission/edit/{id}', 'AdminRolePermissionsController@editPermission');
+    Route::post('permission/update', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@updatePermission'));
+    Route::get('permission/delete/{id}', array('before' => 'demo', 'uses' => 'AdminRolePermissionsController@destroyPermission'));
+    Route::get('permission/role', 'AdminRolePermissionsController@permission_role');
+    Route::post('permission/role/store', 'AdminRolePermissionsController@savePermission');
 
-    Route::get('admin/menu', 'AdminMenuController@index');
-    Route::post('admin/menu/store', array('before' => 'demo', 'uses' => 'AdminMenuController@store'));
-    Route::get('admin/menu/edit/{id}', 'AdminMenuController@edit');
-    Route::post('admin/menu/update', array('before' => 'demo', 'uses' => 'AdminMenuController@update'));
-    Route::post('admin/menu/order', array('before' => 'demo', 'uses' => 'AdminMenuController@order'));
-    Route::get('admin/menu/delete/{id}', array('before' => 'demo', 'uses' => 'AdminMenuController@destroy'));
+    Route::get('menu', 'AdminMenuController@index');
+    Route::post('menu/store', array('before' => 'demo', 'uses' => 'AdminMenuController@store'));
+    Route::get('menu/edit/{id}', 'AdminMenuController@edit');
+    Route::post('menu/update', array('before' => 'demo', 'uses' => 'AdminMenuController@update'));
+    Route::post('menu/order', array('before' => 'demo', 'uses' => 'AdminMenuController@order'));
+    Route::get('menu/delete/{id}', array('before' => 'demo', 'uses' => 'AdminMenuController@destroy'));
 
-    Route::get('admin/plugins', 'AdminPluginsController@index');
+    Route::get('plugins', 'AdminPluginsController@index');
 
-    Route::get('admin/themes', 'AdminThemesController@index');
-    Route::get('admin/theme/activate/{slug}', array('before' => 'demo', 'uses' => 'AdminThemesController@activate'));
+    Route::get('themes', 'AdminThemesController@index');
+    Route::get('theme/activate/{slug}', array('before' => 'demo', 'uses' => 'AdminThemesController@activate'));
 
-    Route::get('admin/settings', 'AdminSettingsController@index');
-    Route::post('admin/settings', array('before' => 'demo', 'uses' => 'AdminSettingsController@save_settings'));
+    Route::get('settings', 'AdminSettingsController@index');
+    Route::post('settings', array('before' => 'demo', 'uses' => 'AdminSettingsController@save_settings'));
 
-    Route::get('admin/payment_settings', 'AdminPaymentSettingsController@index');
-    Route::post('admin/payment_settings', array('before' => 'demo', 'uses' => 'AdminPaymentSettingsController@save_payment_settings'));
+    Route::get('payment_settings', 'AdminPaymentSettingsController@index');
+    Route::post('payment_settings', array('before' => 'demo', 'uses' => 'AdminPaymentSettingsController@save_payment_settings'));
 
-    Route::get('admin/social_settings', 'AdminSocialSettingsController@index');
-    Route::post('admin/social_settings', array('before' => 'demo', 'uses' => 'AdminSocialSettingsController@save_social_settings'));
+    Route::get('social_settings', 'AdminSocialSettingsController@index');
+    Route::post('social_settings', array('before' => 'demo', 'uses' => 'AdminSocialSettingsController@save_social_settings'));
 
-    Route::get('admin/theme_settings_form', 'AdminThemeSettingsController@theme_settings_form');
-    Route::get('admin/theme_settings', 'AdminThemeSettingsController@theme_settings');
-    Route::post('admin/theme_settings', array('before' => 'demo', 'uses' => 'AdminThemeSettingsController@update_theme_settings'));
+    Route::get('theme_settings_form', 'AdminThemeSettingsController@theme_settings_form');
+    Route::get('theme_settings', 'AdminThemeSettingsController@theme_settings');
+    Route::post('theme_settings', array('before' => 'demo', 'uses' => 'AdminThemeSettingsController@update_theme_settings'));
 });
 
 /*
