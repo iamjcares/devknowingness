@@ -6,7 +6,7 @@
 
         <div id="user-badge">
             <img src="<?= Config::get('site.uploads_url') . 'avatars/' . $user->avatar ?>" />
-            <h2 class="form-signin-heading"><?= $user->username ?></h2>
+            <h2 class="form-signin-heading"><?= $user->name ?></h2>
             <div class="label label-info"><?= ucfirst($user->role) ?> User</div>
             <p class="member-since">Member since: <?= $user->created_at ?></p>
 
@@ -53,35 +53,22 @@
 
             <div class="well">
                 <label for="role" style="margin-bottom:10px;">User Type</label>
-                <?php if ($user->role == 'subscriber'): ?>
-                    <div class="label label-success"><i class="fa fa-user"></i> <?= ucfirst($user->role) ?> User</div>
+                <?php if (Entrust::hasRole('admin')): ?>
+                    <div class="label label-success"><i class="fa fa-star"></i> Admin Account</div>
                     <div class="clear"></div>
-                <?php elseif ($user->role == 'demo'): ?>
-                    <div class="label label-danger"><i class="fa fa-life-saver"></i> <?= ucfirst($user->role) ?> User</div>
+                <?php elseif (Entrust::hasRole('author')): ?>
+                    <div class="label label-danger"><i class="fa fa-life-saver"></i> Author Account</div>
                     <div class="clear"></div>
-                <?php elseif ($user->role == 'admin'): ?>
-                    <div class="label label-primary"><i class="fa fa-star"></i> <?= ucfirst($user->role) ?> User</div>
+                <?php elseif (Entrust::hasRole('user')): ?>
+                    <div class="label label-primary"><i class="fa fa-user"></i> Student Account</div>
                     <div class="clear"></div>
                 <?php endif; ?>
-                <a class="btn btn-primary" href="<?= ($settings->enable_https) ? secure_url('/') : URL::to('user') ?><?= '/' . $user->username; ?>/billing" style="margin-top:10px;"><i class="fa fa-credit-card"></i> Manage Your Billing Info</a>
             </div>
             <input type="hidden" name="_token" value="<?= csrf_token() ?>" />
             <input type="submit" value="Update Profile" class="btn btn-primary" />
 
             <div class="clear"></div>
         </form>
-
-    <?php elseif (isset($type) && $type == 'billing'): ?>
-
-        <?php include('partials/user-billing.php'); ?>
-
-    <?php elseif (isset($type) && $type == 'update_credit_card'): ?>
-
-        <?php include('partials/user-update-billing.php'); ?>
-
-    <?php elseif (isset($type) && $type == 'renew_subscription'): ?>
-
-        <?php include('partials/renew-subscription.php'); ?>
 
     <?php endif; ?>
 </div>

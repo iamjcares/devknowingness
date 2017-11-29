@@ -1,6 +1,8 @@
 <?php
 
-class Course extends Eloquent
+namespace Knowingness\Models;
+
+class Course extends \Eloquent
 {
 
     protected $guarded = array();
@@ -9,37 +11,37 @@ class Course extends Eloquent
 
     public function tags()
     {
-        return $this->belongsToMany('Tag');
+        return $this->belongsToMany('Knowingness\Models\Tag');
     }
 
     public function category()
     {
-        return $this->belongsTo('CourseCategory');
+        return $this->belongsTo('Knowingness\Models\CourseCategory');
     }
 
     public function chapters()
     {
-        return $this->hasMany('Chapter');
+        return $this->hasMany('Knowingness\Models\Chapter');
     }
 
     public function objectives()
     {
-        return $this->hasMany('Objective');
+        return $this->hasMany('Knowingness\Models\Objective');
     }
 
     public function requirements()
     {
-        return $this->hasMany('Requirement');
+        return $this->hasMany('Knowingness\Models\Requirement');
     }
 
     public function prerequisites()
     {
-        return $this->hasMany('Prerequisite');
+        return $this->hasMany('Knowingness\Models\Prerequisite');
     }
 
     public function faqs()
     {
-        return $this->hasMany('Faq');
+        return $this->hasMany('Knowingness\Models\Faq');
     }
 
 }

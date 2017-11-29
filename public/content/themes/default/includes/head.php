@@ -1,4 +1,9 @@
-<?php $settings = Setting::first(); ?>
+<?php
+
+use Knowingness\Libraries\ImageHandler;
+
+$settings = Knowingness\Models\Setting::first();
+?>
 
 <?php if (isset($course->id)): ?>
 
@@ -94,7 +99,7 @@
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/rrssb.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/animate.min.css'; ?>" />
 <style type="text/css"><?= dynamic_styles($theme_settings); ?></style>
-<style type="text/css"><?= ThemeHelper::getThemeSetting(@$theme_settings->custom_css, '') ?></style>
+<style type="text/css"><?= Knowingness\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->custom_css, '') ?></style>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>if (!window.jQuery) {

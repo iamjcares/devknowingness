@@ -38,7 +38,7 @@
     </div>
 </div>
 
-<!-- Add New Modal -->
+<!-- Edit Modal -->
 <div class="modal fade" id="update-category">
     <div class="modal-dialog">
         <div class="modal-content">

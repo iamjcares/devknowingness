@@ -1,6 +1,8 @@
 <?php
 
-class CourseCategory extends Eloquent
+namespace Knowingness\Models;
+
+class CourseCategory extends \Eloquent
 {
 
     protected $guarded = array();
@@ -11,12 +13,12 @@ class CourseCategory extends Eloquent
 
     public function courses()
     {
-        return $this->hasMany('Course');
+        return $this->hasMany('Knowingness\Models\Course');
     }
 
     public function hasChildren()
     {
-        if (DB::table('course_categories')->where('parent_id', '=', $this->id)->count() >= 1) {
+        if (\DB::table('course_categories')->where('parent_id', '=', $this->id)->count() >= 1) {
             return true;
         } else {
             return false;

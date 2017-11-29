@@ -1,5 +1,7 @@
 <?php
 
+namespace Knowingness\Http\Controllers;
+
 use \Redirect as Redirect;
 
 class AdminCourseCategoriesController extends Controller

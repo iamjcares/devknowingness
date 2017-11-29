@@ -4,10 +4,10 @@
             <a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('course') : URL::to('course') ?><?= '/' . $course->slug ?>">
                 <div class="thumbnail-overlay"></div>
                 <span class="play-button"></span>
-                <img src="<?= ImageHandler::getImage($course->image, 'medium') ?>">
+                <img src="<?= Knowingness\Libraries\ImageHandler::getImage($course->image, 'medium') ?>">
                 <div class="details">
                     <h2><?= $course->title; ?></h2>
-                    <span><?= TimeHelper::convert_seconds_to_HMS(200); ?></span>
+                    <span><?= Knowingness\Libraries\TimeHelper::convert_seconds_to_HMS(200); ?></span>
                 </div>
             </a>
             <div class="block-contents">

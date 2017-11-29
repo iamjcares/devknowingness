@@ -1,6 +1,8 @@
 <?php
 
-class Tag extends Eloquent
+namespace Knowingness\Models;
+
+class Tag extends \Eloquent
 {
 
     protected $guarded = array();
@@ -8,7 +10,7 @@ class Tag extends Eloquent
 
     public function courses()
     {
-        return $this->belongsToMany('Course');
+        return $this->belongsToMany('Knowingness\Models\Course');
     }
 
 }

@@ -41,7 +41,9 @@
                 </header>
 
                 <section class="album-info">
-                    <h3><a href="{{ URL::to('admin/courses/edit') . '/' . $course->id }}"><?php
+                    <h3><a href="{{ URL::to('admin/courses/edit') . '/' . $course->id }}">
+
+                            <?php
                             if (strlen($course->title) > 25) {
                                 echo substr($course->title, 0, 25) . '...';
                             } else {

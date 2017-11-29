@@ -1,6 +1,6 @@
 <?php
 
-namespace HelloVideo\Exceptions;
+namespace Knowingness\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;

@@ -60,7 +60,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => HelloVideo\User::class,
+            'model' => Knowingness\User::class,
         ],
     // 'users' => [
     //     'driver' => 'database',

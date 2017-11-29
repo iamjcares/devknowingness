@@ -1,6 +1,8 @@
 <?php
 
-class Setting extends Eloquent
+namespace Knowingness\Models;
+
+class Setting extends \Eloquent
 {
 
     protected $guarded = array();

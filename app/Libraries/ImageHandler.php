@@ -1,145 +1,148 @@
 <?php
 
-class ImageHandler {
+namespace Knowingness\Libraries;
 
-	public static function uploadImage($image, $folder, $filename = '', $type = 'upload'){
-		return call_user_func ( Config::get('site.media_upload_function'), array('image' => $image, 'folder' => $folder, 'filename' => $filename, 'type' => $type) );
-	}
+use Config;
+use Image;
 
-	public static function getImage($image, $size = ''){
-		$img = ''; // placeholder image
-	
-		$image_url = Config::get('site.uploads_dir') . 'images/';
+class ImageHandler
+{
 
-		if($size == ''){
-			$img = $image;
-		} else {
+    public static function uploadImage($image, $folder, $filename = '', $type = 'upload')
+    {
+        return call_user_func(Config::get('site.media_upload_function'), array('image' => $image, 'folder' => $folder, 'filename' => $filename, 'type' => $type));
+    }
 
-			switch($size){
-				case 'large':
-					$img = str_replace('.' . pathinfo($image, PATHINFO_EXTENSION), '-large.' . pathinfo($image, PATHINFO_EXTENSION), $image);
-					break;
-				case 'medium':
-					$img = str_replace('.' . pathinfo($image, PATHINFO_EXTENSION), '-medium.' . pathinfo($image, PATHINFO_EXTENSION), $image);
-					break;
-				case 'small':
-					$img = str_replace('.' . pathinfo($image, PATHINFO_EXTENSION), '-small.' . pathinfo($image, PATHINFO_EXTENSION), $image);
-					break;
-				default:
-					$img = $image;
-					break;
-			}
-		}
+    public static function getImage($image, $size = '')
+    {
+        $img = ''; // placeholder image
 
-		return $image_url . $img;
+        $image_url = Config::get('site.uploads_dir') . 'images/';
 
-	}
+        if ($size == '') {
+            $img = $image;
+        } else {
 
+            switch ($size) {
+                case 'large':
+                    $img = str_replace('.' . pathinfo($image, PATHINFO_EXTENSION), '-large.' . pathinfo($image, PATHINFO_EXTENSION), $image);
+                    break;
+                case 'medium':
+                    $img = str_replace('.' . pathinfo($image, PATHINFO_EXTENSION), '-medium.' . pathinfo($image, PATHINFO_EXTENSION), $image);
+                    break;
+                case 'small':
+                    $img = str_replace('.' . pathinfo($image, PATHINFO_EXTENSION), '-small.' . pathinfo($image, PATHINFO_EXTENSION), $image);
+                    break;
+                default:
+                    $img = $image;
+                    break;
+            }
+        }
 
-	public static function upload($args){
+        return $image_url . $img;
+    }
 
-		// Lets get all these Arguments and assign them!
-		$image = $args['image'];
-		$folder = $args['folder'];
-		$filename = $args['filename']; 
-		$type = $args['type'];
+    public static function upload($args)
+    {
 
-		// Hey if the folder we want to put them in is images. Let's give them a month and year folder
-		if($folder == 'images'){
-			$month_year = date('FY').'/';
-		} else {
-			$month_year = '';
-		}
+        // Lets get all these Arguments and assign them!
+        $image = $args['image'];
+        $folder = $args['folder'];
+        $filename = $args['filename'];
+        $type = $args['type'];
 
-		// Check it out! This is the upload folder
-		$upload_folder = 'content/uploads/' . $folder . '/'.$month_year;
+        // Hey if the folder we want to put them in is images. Let's give them a month and year folder
+        if ($folder == 'images') {
+            $month_year = date('FY') . '/';
+        } else {
+            $month_year = '';
+        }
 
-
-		if ( @getimagesize($image) ){
-
-			// if the folder doesn't exist then create it.
-			if (!file_exists($upload_folder)) {
-				mkdir($upload_folder, 0777, true);
-			}
-
-			if($type =='upload'){
-
-				$filename =  $image->getClientOriginalName();
-
-				// if the file exists give it a unique name
-				while (file_exists($upload_folder.$filename)) {
-					$filename =  uniqid() . '-' . $filename;
-				}
+        // Check it out! This is the upload folder
+        $upload_folder = 'content/uploads/' . $folder . '/' . $month_year;
 
 
-				$uploadSuccess = $image->move($upload_folder, $filename);
+        if (@getimagesize($image)) {
 
-				if(strpos($filename, '.gif') > 0){
-					$new_filename = str_replace('.gif', '-animation.gif', $filename);
-					copy($upload_folder . $filename, $upload_folder . $new_filename);
-				}
+            // if the folder doesn't exist then create it.
+            if (!file_exists($upload_folder)) {
+                mkdir($upload_folder, 0777, true);
+            }
 
-			} else if($type = 'url'){
-				
-				$file = file_get_contents($image);
+            if ($type == 'upload') {
 
-				if(strpos($image, '.gif') > 0){
-					$extension = '-animation.gif';
-				} else {
-					$extension = '.jpg';
-				}
+                $filename = $image->getClientOriginalName();
+
+                // if the file exists give it a unique name
+                while (file_exists($upload_folder . $filename)) {
+                    $filename = uniqid() . '-' . $filename;
+                }
 
 
-				$filename = $filename . $extension;
+                $uploadSuccess = $image->move($upload_folder, $filename);
 
-				if (file_exists($upload_folder.$filename)) {
-					$filename =  uniqid() . '-' . $filename . $extension;
-				}
+                if (strpos($filename, '.gif') > 0) {
+                    $new_filename = str_replace('.gif', '-animation.gif', $filename);
+                    copy($upload_folder . $filename, $upload_folder . $new_filename);
+                }
+            } else if ($type = 'url') {
 
-			    if(strpos($image, '.gif') > 0){
-					file_put_contents($upload_folder.$filename, $file);
-					$filename = str_replace('-animation.gif', '.gif', $filename);
-				}
+                $file = file_get_contents($image);
 
-			    file_put_contents($upload_folder.$filename, $file);
+                if (strpos($image, '.gif') > 0) {
+                    $extension = '-animation.gif';
+                } else {
+                    $extension = '.jpg';
+                }
 
-			}
-		   
-		
-			$settings = Setting::first();
 
-			$img = Image::make($upload_folder . $filename);
+                $filename = $filename . $extension;
 
-			if($folder == 'images'){
-				$img->resize(1280, null, function ($constraint) {
-				    $constraint->aspectRatio();
-				});
+                if (file_exists($upload_folder . $filename)) {
+                    $filename = uniqid() . '-' . $filename . $extension;
+                }
 
-				Image::make($upload_folder . $filename)->resize(960, null, function ($constraint) {
-				    $constraint->aspectRatio();
-				})->save($upload_folder . pathinfo($filename, PATHINFO_FILENAME) . '-large.' . pathinfo($filename, PATHINFO_EXTENSION));
-				
-				Image::make($upload_folder . $filename)->resize(640, null, function ($constraint) {
-				    $constraint->aspectRatio();
-				})->save($upload_folder . pathinfo($filename, PATHINFO_FILENAME) . '-medium.' . pathinfo($filename, PATHINFO_EXTENSION));
-				
-				Image::make($upload_folder . $filename)->resize(320, null, function ($constraint) {
-				    $constraint->aspectRatio();
-				})->save($upload_folder . pathinfo($filename, PATHINFO_FILENAME) . '-small.' . pathinfo($filename, PATHINFO_EXTENSION));
-				
-			} else if($folder == 'avatars'){
-				$img->resize(300, null, function ($constraint) {
-				    $constraint->aspectRatio();
-				});
-			}
+                if (strpos($image, '.gif') > 0) {
+                    file_put_contents($upload_folder . $filename, $file);
+                    $filename = str_replace('-animation.gif', '.gif', $filename);
+                }
 
-			$img->save($upload_folder . $filename);
-			
-			return $month_year . $filename;
+                file_put_contents($upload_folder . $filename, $file);
+            }
 
-		} else {
-			return false;
-		}
-	}
+
+            $settings = Setting::first();
+
+            $img = Image::make($upload_folder . $filename);
+
+            if ($folder == 'images') {
+                $img->resize(1280, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                Image::make($upload_folder . $filename)->resize(960, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($upload_folder . pathinfo($filename, PATHINFO_FILENAME) . '-large.' . pathinfo($filename, PATHINFO_EXTENSION));
+
+                Image::make($upload_folder . $filename)->resize(640, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($upload_folder . pathinfo($filename, PATHINFO_FILENAME) . '-medium.' . pathinfo($filename, PATHINFO_EXTENSION));
+
+                Image::make($upload_folder . $filename)->resize(320, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($upload_folder . pathinfo($filename, PATHINFO_FILENAME) . '-small.' . pathinfo($filename, PATHINFO_EXTENSION));
+            } else if ($folder == 'avatars') {
+                $img->resize(300, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }
+
+            $img->save($upload_folder . $filename);
+
+            return $month_year . $filename;
+        } else {
+            return false;
+        }
+    }
 
 }

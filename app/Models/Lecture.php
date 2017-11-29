@@ -1,6 +1,8 @@
 <?php
 
-class Lecture extends Eloquent
+namespace Knowingness\Models;
+
+class Lecture extends \Eloquent
 {
 
     protected $guarded = array();
@@ -9,7 +11,7 @@ class Lecture extends Eloquent
 
     public function chapter()
     {
-        return $this->belongsTo('Chapter');
+        return $this->belongsTo('Knowingness\Models\Chapter');
     }
 
 }

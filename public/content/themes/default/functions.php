@@ -49,7 +49,7 @@ if (!function_exists('generate_menu')):
                 $output .= '<a href="/courses" class="dropdown-toggle">' . $menu_item->name . ' <span class="caret"></span></a>';
 
                 $output .= '<ul class="dropdown-menu multi-level" role="menu">';
-                $output .= generate_course_post_menu(CourseCategory::orderBy('order', 'ASC')->get(), '/courses/category/');
+                $output .= generate_course_post_menu(Knowingness\Models\CourseCategory::orderBy('order', 'ASC')->get(), '/courses/category/');
 
                 $output .= '</li></ul>';
 
@@ -68,7 +68,7 @@ if (!function_exists('generate_menu')):
                 $output .= '<a href="/posts" class="dropdown-toggle">' . $menu_item->name . ' <span class="caret"></span></a>';
 
                 $output .= '<ul class="dropdown-menu multi-level" role="menu">';
-                $output .= generate_course_post_menu(PostCategory::orderBy('order', 'ASC')->get(), '/posts/category/');
+                $output .= generate_course_post_menu(Knowingness\Models\PostCategory::orderBy('order', 'ASC')->get(), '/posts/category/');
 
                 $output .= '</li></ul>';
 
@@ -220,7 +220,7 @@ if (!function_exists('dynamic_styles')):
 
     function dynamic_styles($theme_settings)
     {
-        $hex_color = ThemeHelper::getThemeSetting(@$theme_settings->color, '');
+        $hex_color = Knowingness\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->color, '');
         if (empty($hex_color)) {
             $hex_color = '#98cb00';
         }

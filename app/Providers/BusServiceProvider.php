@@ -1,6 +1,6 @@
 <?php
 
-namespace HelloVideo\Providers;
+namespace Knowingness\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

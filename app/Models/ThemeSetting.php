@@ -1,9 +1,12 @@
 <?php
 
-class ThemeSetting extends Eloquent {
-	protected $guarded = array();
+namespace Knowingness\Models;
 
-	public static $rules = array();
+class ThemeSetting extends \Eloquent
+{
 
-	protected $fillable = array('theme_slug', 'key', 'value');
+    protected $guarded = array();
+    public static $rules = array();
+    protected $fillable = array('theme_slug', 'key', 'value');
+
 }

@@ -1,9 +1,20 @@
 <?php
 
-use \Redirect as Redirect;
-use \HelloVideo\User as User;
+namespace Knowingness\Http\Controllers;
 
-class ThemePageController extends \BaseController
+use Redirect;
+use Knowingness\Models\Setting;
+use Knowingness\Models\Page;
+use Knowingness\Models\Course;
+use Knowingness\Models\Menu;
+use Knowingness\Models\CourseCategory;
+use Knowingness\Models\PostCategory;
+use Knowingness\Libraries\ThemeHelper;
+use View;
+use Knowingness\User;
+use Entrust;
+
+class ThemePageController extends BaseController
 {
 
     public function __construct()
@@ -22,7 +33,7 @@ class ThemePageController extends \BaseController
         $page = Page::where('slug', '=', $slug)->first();
 
         //Make sure page is active
-        if ((!Auth::guest() && Auth::user()->role == 'admin') || $page->active) {
+        if (Entrust::hasRole('admin') || $page->active) {
 
             $author = User::find($page->user_id);
             $data = array(

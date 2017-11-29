@@ -142,13 +142,13 @@ return [
         /*
          * Application Service Providers...
          */
-        'HelloVideo\Providers\AppServiceProvider',
-        'HelloVideo\Providers\BroadcastServiceProvider',
-        'HelloVideo\Providers\AuthServiceProvider',
-        'HelloVideo\Providers\BusServiceProvider',
-        'HelloVideo\Providers\ConfigServiceProvider',
-        'HelloVideo\Providers\EventServiceProvider',
-        'HelloVideo\Providers\RouteServiceProvider',
+        'Knowingness\Providers\AppServiceProvider',
+        'Knowingness\Providers\BroadcastServiceProvider',
+        'Knowingness\Providers\AuthServiceProvider',
+        'Knowingness\Providers\BusServiceProvider',
+        'Knowingness\Providers\ConfigServiceProvider',
+        'Knowingness\Providers\EventServiceProvider',
+        'Knowingness\Providers\RouteServiceProvider',
         'Intervention\Image\ImageServiceProvider',
         Laravel\Socialite\SocialiteServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,

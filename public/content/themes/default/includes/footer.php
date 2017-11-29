@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h3><?php echo $settings->website_name; ?></h3>
-                <p><?= ThemeHelper::getThemeSetting(@$theme_settings->footer_description, 'Knowingness is your Video Subscription Platform. Add unlimited videos, posts, and pages to your subscription site. Earn re-curring revenue and require users to subscribe to access premium content on your website.') ?></p>
+                <p><?= Knowingness\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->footer_description, 'Knowingness is your Video Subscription Platform. Add unlimited videos, posts, and pages to your subscription site. Earn re-curring revenue and require users to subscribe to access premium content on your website.') ?></p>
                 <a href="http://facebook.com/<?php echo $settings->facebook_page_id; ?>" target="_blank" class="facebook social-link"><i class="fa fa-facebook"></i></a>
                 <a href="http://twitter.com/<?php echo $settings->twitter_page_id; ?>" target="_blank" class="twitter social-link"><i class="fa fa-twitter"></i></a>
                 <a href="http://plus.google.com/<?php echo $settings->google_page_id; ?>" target="_blank" class="google social-link"><i class="fa fa-google-plus"></i></a>
@@ -154,7 +154,7 @@
     </script>
 <?php endif; ?>
 
-<script><?= ThemeHelper::getThemeSetting(@$theme_settings->custom_js, '') ?></script>
+<script><?= Knowingness\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->custom_js, '') ?></script>
 
 </body>
 </html>

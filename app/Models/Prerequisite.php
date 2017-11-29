@@ -1,6 +1,8 @@
 <?php
 
-class Prerequisite extends Eloquent
+namespace Knowingness\Models;
+
+class Prerequisite extends \Eloquent
 {
 
     protected $table = 'prerequisites';
@@ -10,7 +12,7 @@ class Prerequisite extends Eloquent
 
     public function course()
     {
-        return $this->belongsTo('Course');
+        return $this->belongsTo('Knowingness\Models\Course');
     }
 
 }

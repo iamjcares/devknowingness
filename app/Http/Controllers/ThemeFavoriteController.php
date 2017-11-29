@@ -1,8 +1,20 @@
 <?php
 
-use \Redirect as Redirect;
+namespace Knowingness\Http\Controllers;
 
-class ThemeFavoriteController extends \BaseController
+use Redirect;
+use Knowingness\Models\Favorite;
+use Knowingness\Models\Page;
+use Knowingness\Models\Course;
+use Knowingness\Models\Menu;
+use Knowingness\Models\CourseCategory;
+use Knowingness\Models\PostCategory;
+use Knowingness\Libraries\ThemeHelper;
+use View;
+use Auth;
+use Input;
+
+class ThemeFavoriteController extends BaseController
 {
 
     public function __construct()
@@ -29,7 +41,7 @@ class ThemeFavoriteController extends \BaseController
     public function show_favorites()
     {
 
-        if (!Auth::guest()):
+        if (!Auth::guest()) {
 
             $page = Input::get('page');
 
@@ -60,10 +72,9 @@ class ThemeFavoriteController extends \BaseController
             );
 
             return View::make('Theme::course-list', $data);
-
-        else:
+        } else {
             return Redirect::to('courses');
-        endif;
+        }
     }
 
 }

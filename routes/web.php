@@ -100,16 +100,36 @@ Route::group(['middleware' => ['role:user']], function() {
 
     /*
       |--------------------------------------------------------------------------
+      | Cart Routes
+      |--------------------------------------------------------------------------
+     */
+    Route::post('cart/add', 'ThemeCartController@addItem');
+    Route::post('cart/remove', 'ThemeCartController@removeItem');
+    Route::get('cart/clear', 'ThemeCartController@clearCart');
+    Route::get('cart', 'ThemeCartController@index');
+
+    Route::get('checkout', 'ThemeCheckoutController@index');
+
+    /*
+      |--------------------------------------------------------------------------
+      | WishList Routes
+      |--------------------------------------------------------------------------
+     */
+    Route::post('wishlist/add', 'ThemeWishListController@addItem');
+    Route::post('wishlist/remove', 'ThemeWishListController@removeItem');
+    Route::get('wishlist/clear', 'ThemeWishListController@clearCart');
+    Route::get('wishlist', 'ThemeWishListController@index');
+
+    /*
+      |--------------------------------------------------------------------------
       | User and User Edit Routes
       |--------------------------------------------------------------------------
      */
 
     Route::get('user/{username}', 'ThemeUserController@index');
     Route::get('user/{username}/edit', 'ThemeUserController@edit');
+    Route::get('user/{username}/courses', ['uses' => 'ThemeUserController@courses', 'as' => 'my-courses']);
     Route::post('user/{username}/update', 'ThemeUserController@update');
-    Route::get('user/{username}/cancel', 'ThemeUserController@cancel_account');
-    Route::get('user/{username}/resume', 'ThemeUserController@resume_account');
-    Route::get('user/{username}/update_cc', 'ThemeUserController@update_cc');
 });
 
 
@@ -217,7 +237,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['role:admin']], function() {
  */
 
 Route::post('stripe/webhook', 'Laravel\Cashier\WebhookController@handleWebhook');
-
+Route::post('payment/create', ['uses' => 'ThemePayPalPaymentController@createPayment', 'as' => 'paypal.create']);
+Route::post('payment/execute', ['uses' => 'ThemePayPalPaymentController@executePayment', 'as' => 'paypal.execute']);
+Route::get('payment/check', 'ThemePayPalPaymentController@testOrder');
 /*
 |--------------------------------------------------------------------------
 | API Routes

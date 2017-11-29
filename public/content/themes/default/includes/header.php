@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-
         <?php include('head.php'); ?>
-
     </head>
     <body <?php if (Request::is('/')) echo 'class="home"'; ?>>
 
@@ -35,9 +33,12 @@
                                 <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->name) ?> <i class="fa fa-chevron-down"></i></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
+                                    <li><a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . Auth::user()->username . '/courses'; ?>">My Courses</a></li>
                                     <li><a href="<?= ($settings->enable_https) ? secure_url('favorites') : URL::to('favorites') ?>">My Favorites</a></li>
+                                    <li><a href="<?= ($settings->enable_https) ? secure_url('cart') : URL::to('cart') ?>">My Cart</a></li>
+                                    <li><a href="<?= ($settings->enable_https) ? secure_url('wishlist') : URL::to('wishlist') ?>">My Wishlist</a></li>
 
-                                    <?php if (Auth::user()->role == 'admin' || Auth::user()->role == 'demo'): ?>
+                                    <?php if (Entrust::hasRole(['admin', 'author'])): ?>
                                         <li class="divider"></li>
                                         <li><a href="<?= ($settings->enable_https) ? secure_url('admin') : URL::to('admin') ?>"> Admin</a></li>
                                     <?php endif; ?>

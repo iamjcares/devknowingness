@@ -1,6 +1,6 @@
 <?php
 
-namespace HelloVideo\Http;
+namespace Knowingness\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -13,9 +13,9 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \HelloVideo\Http\Middleware\TrimStrings::class,
+        \Knowingness\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
@@ -31,7 +31,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \HelloVideo\Http\Middleware\VerifyCsrfToken::class,
+            \Knowingness\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'api' => [
@@ -46,10 +46,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => 'HelloVideo\Http\Middleware\Authenticate',
+        'auth' => 'Knowingness\Http\Middleware\Authenticate',
         'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
-        'guest' => 'HelloVideo\Http\Middleware\RedirectIfAuthenticated',
-        'secure' => 'HelloVideo\Http\Middleware\Secure',
+        'guest' => 'Knowingness\Http\Middleware\RedirectIfAuthenticated',
+        'secure' => 'Knowingness\Http\Middleware\Secure',
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,

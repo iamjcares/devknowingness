@@ -1,12 +1,20 @@
 <?php
 
-use \Auth as Auth;
-use \HelloVideo\User;
-use \HelloVideo\Role;
-use \Redirect as Redirect;
-use Illuminate\Contracts\Auth\PasswordBroker;
+namespace Knowingness\Http\Controllers;
 
-//use Socialite;
+use Redirect;
+use Knowingness\Models\Page;
+use Knowingness\Models\Menu;
+use Knowingness\Models\CourseCategory;
+use Knowingness\Models\PostCategory;
+use Knowingness\Libraries\ThemeHelper;
+use View;
+use Auth;
+use Input;
+use Knowingness\User;
+use Knowingness\Role;
+use Illuminate\Contracts\Auth\PasswordBroker;
+use Socialite;
 
 class ThemeAuthController extends BaseController
 {
@@ -25,7 +33,6 @@ class ThemeAuthController extends BaseController
 
     public function login_form()
     {
-        $this->middleware('guest');
         $data = array(
             'type' => 'login',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -39,9 +46,6 @@ class ThemeAuthController extends BaseController
 
     public function social_form()
     {
-        if (!Auth::guest()) {
-            return Redirect::to('/');
-        }
         $data = array(
             'type' => 'social_login',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -55,14 +59,9 @@ class ThemeAuthController extends BaseController
 
     public function signup_form()
     {
-        $this->middleware('guest');
-//        if (!Auth::guest()) {
-//            return Redirect::to('/');
-//        }
         $data = array(
             'type' => 'signup',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'payment_settings' => PaymentSetting::first(),
             'course_categories' => CourseCategory::all(),
             'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),

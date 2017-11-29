@@ -1,6 +1,6 @@
 <?php
 
-namespace HelloVideo;
+namespace Knowingness;
 
 use Zizaco\Entrust\EntrustPermission;
 

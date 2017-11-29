@@ -65,7 +65,8 @@
                         <th>Display Name</th>
                         <th>Description</th>
                         <th>Actions</th>
-                        @foreach($roles as $role)
+                    </tr>
+                    @foreach($roles as $role)
                     <tr>
                         <td>
                             @if(strlen($role->name) > 40) {{substr($role->name, 0, 40)}} ... @else {{$role->name}} @endif

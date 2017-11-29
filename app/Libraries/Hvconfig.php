@@ -1,32 +1,39 @@
 <?php
 
-class Hvconfig {
+namespace Knowingness\Libraries;
 
-	private $cfg = array();
-	private $config_file = './config.php';
+class Hvconfig
+{
 
-	public function __construct(){
-		$this->cfg = include $this->config_file;
-	}
+    private $cfg = array();
+    private $config_file = './config.php';
 
-	public function getConfig(){
-		return $this->cfg;
-	}
+    public function __construct()
+    {
+        $this->cfg = include $this->config_file;
+    }
 
-	public function add($key, $value){
-		$this->cfg[$key] = $value;
-	}
+    public function getConfig()
+    {
+        return $this->cfg;
+    }
 
-	public function delete($key, $value){
+    public function add($key, $value)
+    {
+        $this->cfg[$key] = $value;
+    }
 
-	}
+    public function delete($key, $value)
+    {
 
-	public function updateConfig(){
+    }
 
-		$results = var_export($this->cfg, true);
-		$config_string = "<?php return " . $results . ";";
-		return file_put_contents($this->config_file, $config_string);
+    public function updateConfig()
+    {
 
-	}
+        $results = var_export($this->cfg, true);
+        $config_string = "<?php return " . $results . ";";
+        return file_put_contents($this->config_file, $config_string);
+    }
 
 }

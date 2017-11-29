@@ -1,6 +1,8 @@
 <?php
 
-class Page extends Eloquent
+namespace Knowingness\Models;
+
+class Page extends \Eloquent
 {
 
     protected $guarded = array();

@@ -1,5 +1,7 @@
 <?php
 
+namespace Knowingness\Libraries;
+
 class ConfigHelper
 {
 

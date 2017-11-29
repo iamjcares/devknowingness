@@ -1,12 +1,12 @@
 <?php
 
-namespace HelloVideo\Providers;
+namespace Knowingness\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Setting;
-use View as View;
+use Knowingness\Models\Setting;
+use View;
 use function base_path;
 
 class RouteServiceProvider extends ServiceProvider
@@ -19,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = null;
+    protected $namespace = 'Knowingness\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.

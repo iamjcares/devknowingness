@@ -1,6 +1,8 @@
 <?php
 
-class CourseTag extends Eloquent
+namespace Knowingness\Models;
+
+class CourseTag extends \Eloquent
 {
 
     protected $table = 'course_tag';

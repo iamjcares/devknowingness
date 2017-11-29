@@ -1,6 +1,8 @@
 <?php
 
-class Menu extends Eloquent
+namespace Knowingness\Models;
+
+class Menu extends \Eloquent
 {
 
     protected $guarded = array();
@@ -9,7 +11,7 @@ class Menu extends Eloquent
 
     public function hasChildren()
     {
-        if (DB::table('menu')->where('parent_id', '=', $this->id)->count() >= 1) {
+        if (\DB::table('menu')->where('parent_id', '=', $this->id)->count() >= 1) {
             return true;
         } else {
             return false;

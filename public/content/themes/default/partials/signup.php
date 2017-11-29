@@ -1,5 +1,3 @@
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-
 <div class="row" id="signup-form">
 
     <form method="POST" action="<?= ($settings->enable_https) ? secure_url('signup') : URL::to('signup') ?>" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="signup-form">
@@ -12,7 +10,7 @@
 
                 <div class="row">
 
-                    <h1 class="panel-title col-lg-7 col-md-8 col-sm-6"><?= ThemeHelper::getThemeSetting(@$theme_settings->signup_message, 'Signup to Gain access to all content on the site.') ?></h1>
+                    <h1 class="panel-title col-lg-7 col-md-8 col-sm-6"><?= \Knowingness\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->signup_message, 'Signup to Gain access to all content on the site.') ?></h1>
 
                     <div class="cc-icons col-lg-5 col-md-4">
                         <img src="<?= THEME_URL ?>/assets/img/credit-cards.png" alt="All Credit Cards Supported" />

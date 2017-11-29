@@ -1,6 +1,8 @@
 <?php
 
-class Profile extends Eloquent
+namespace Knowingness\Models;
+
+class Profile extends \Eloquent
 {
 
     protected $fillable = [
@@ -16,7 +18,7 @@ class Profile extends Eloquent
 
     public function user()
     {
-        return $this->belongsTo('HelloVideo\User');
+        return $this->belongsTo('Knowingness\User');
     }
 
 }

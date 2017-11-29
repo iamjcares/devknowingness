@@ -1,10 +1,10 @@
 <?php
 
-namespace HelloVideo\Http\Middleware;
+namespace Knowingness\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
-use \Setting as Setting;
+use Knowingness\Models\Setting;
 
 /**
  * Secure

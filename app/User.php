@@ -1,6 +1,6 @@
 <?php
 
-namespace HelloVideo;
+namespace Knowingness;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +33,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['name', 'username', 'active', 'email', 'avatar', 'password', 'role', 'status', 'disabled'];
+    protected $fillable = ['name', 'username', 'active', 'email', 'avatar', 'password', 'status', 'disabled'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -54,6 +54,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function profile()
     {
         return $this->hasOne('Profile');
+    }
+
+    public function cart()
+    {
+        return $this->hasOne('Knowingness\Models\Cart');
     }
 
 }

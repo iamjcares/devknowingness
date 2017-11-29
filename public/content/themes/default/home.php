@@ -1,4 +1,9 @@
-<?php include('includes/header.php'); ?>
+<?php
+
+use Knowingness\Libraries\ThemeHelper;
+
+include('includes/header.php');
+?>
 
 <style type="text/css">
     #home-content{
@@ -23,9 +28,9 @@
             <h4><?= ThemeHelper::getThemeSetting(@$theme_settings->homepage_subheadline, 'A bit more details about your Online Video Subscription Service') ?></h4>
             <?php if (Auth::guest()): ?>
                 <button class="btn btn-primary" onClick="window.location = '/signup'" href="/signup"><?= ThemeHelper::getThemeSetting(@$theme_settings->home_button_text, 'Become a Member for just $7 a month') ?></button>
-            <?php else: ?>
+<?php else: ?>
                 <button class="btn btn-primary" onClick="window.location = '/courses'" href="/courses"><?= ThemeHelper::getThemeSetting(@$theme_settings->home_button_text_logged_in, 'Start Watching Videos Now') ?></button>
-            <?php endif; ?>
+<?php endif; ?>
         </div>
     </div>
 </div>
@@ -37,13 +42,13 @@
         <h3>Checkout our Latest Courses Below</h3>
         <div class="row">
 
-            <?php include('partials/course-loop.php'); ?>
+<?php include('partials/course-loop.php'); ?>
 
         </div>
 
     </div>
 
-    <?php include('partials/pagination.php'); ?>
+<?php include('partials/pagination.php'); ?>
 
 </div>
 

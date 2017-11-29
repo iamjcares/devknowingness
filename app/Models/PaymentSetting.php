@@ -1,11 +1,14 @@
 <?php
 
-class PaymentSetting extends Eloquent {
-	protected $guarded = array();
+namespace Knowingness\Models;
 
-	public static $rules = array();
+class PaymentSetting extends \Eloquent
+{
 
-	public $timestamps = false;
+    protected $guarded = array();
+    public static $rules = array();
+    public $timestamps = false;
+    protected $fillable = array('enable_paypal', 'enable_stripe', 'paypal_live_mode', 'stripe_live_mode', 'paypal_test_secret_key', 'paypal_test_publishable_key',
+        'paypal_live_secret_key', 'paypal_live_publishable_key', 'stripe_test_secret_key', 'stripe_test_publishable_key', 'stripe_live_secret_key', 'stripe_live_publishable_key');
 
-	protected $fillable = array('live_mode', 'test_secret_key', 'test_publishable_key', 'live_secret_key', 'live_publishable_key');
 }

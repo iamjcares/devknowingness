@@ -1,9 +1,20 @@
 <?php
 
-use \Redirect as Redirect;
-use \HelloVideo\User as User;
+namespace Knowingness\Http\Controllers;
 
-class ThemePostController extends \BaseController
+use Redirect;
+use Knowingness\Models\Setting;
+use Knowingness\Models\Page;
+use Knowingness\Models\Menu;
+use Knowingness\Models\CourseCategory;
+use Knowingness\Models\PostCategory;
+use Knowingness\Models\Post;
+use Knowingness\Libraries\ThemeHelper;
+use View;
+use Input;
+use Knowingness\User;
+
+class ThemePostController extends BaseController
 {
 
     private $posts_per_page = 12;
@@ -26,7 +37,7 @@ class ThemePostController extends \BaseController
         $post = Post::where('slug', '=', $slug)->first();
 
         //Make sure post is active
-        if ((!Auth::guest() && Auth::user()->role == 'admin') || $post->active) {
+        if (Entrust::hasRole(['admin', 'author']) || $post->active) {
 
             $author = User::find($post->user_id);
             $data = array(

@@ -18,7 +18,7 @@ return [
       | the role if it is in a different namespace.
       |
      */
-    'role' => 'HelloVideo\Role',
+    'role' => 'Knowingness\Role',
     /*
       |--------------------------------------------------------------------------
       | Entrust Roles Table
@@ -37,7 +37,7 @@ return [
       | Update the permission if it is in a different namespace.
       |
      */
-    'permission' => 'HelloVideo\Permission',
+    'permission' => 'Knowingness\Permission',
     /*
       |--------------------------------------------------------------------------
       | Entrust Permissions Table

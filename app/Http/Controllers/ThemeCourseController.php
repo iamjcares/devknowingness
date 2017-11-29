@@ -1,8 +1,22 @@
 <?php
 
-use \Redirect as Redirect;
+namespace Knowingness\Http\Controllers;
 
-class ThemeCourseController extends \BaseController
+use Redirect;
+use Knowingness\Models\Setting;
+use Knowingness\Models\Page;
+use Knowingness\Models\Tag;
+use Knowingness\Models\Course;
+use Knowingness\Models\Menu;
+use Knowingness\Models\Favorite;
+use Knowingness\Models\CourseCategory;
+use Knowingness\Models\PostCategory;
+use Knowingness\Libraries\ThemeHelper;
+use View;
+use Input;
+use Auth;
+
+class ThemeCourseController extends BaseController
 {
 
     private $courses_per_page = 12;
@@ -163,28 +177,6 @@ class ThemeCourseController extends \BaseController
         );
 
         return View::make('Theme::course-list', $data);
-    }
-
-    public function handleViewCount($id)
-    {
-        // check if this key already exists in the view_media session
-        $blank_array = array();
-        if (!array_key_exists($id, Session::get('viewed_video', $blank_array))) {
-
-            try {
-                // increment view
-                $video = Course::find($id);
-                $video->views = $video->views + 1;
-                $video->save();
-                // Add key to the view_media session
-                Session::put('viewed_video.' . $id, time());
-                return true;
-            } catch (Exception $e) {
-                return false;
-            }
-        } else {
-            return false;
-        }
     }
 
 }

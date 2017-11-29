@@ -177,7 +177,6 @@ CREATE TABLE `users` (
   `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default.jpg',
   `password` varchar(255) COLLATE utf8_unicode_ci NULL,
-  `role` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'subscriber',
   `provider` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -189,13 +188,6 @@ CREATE TABLE `users` (
   `activation_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `confirmed` int(1) NOT NULL DEFAULT '0',
   `remember_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `stripe_active` tinyint(4) NOT NULL DEFAULT '0',
-  `stripe_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `stripe_subscription` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `stripe_plan` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `last_four` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `trial_ends_at` timestamp NULL DEFAULT NULL,
-  `subscription_ends_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`username`),
   UNIQUE KEY `uniuqe_email` (`email`)
@@ -252,3 +244,74 @@ CREATE TABLE `role_user` (
   PRIMARY KEY (`user_id`,`role_id`),
   KEY `role_user_role_id_foreign` (`role_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `carts` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `instance` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `cart_course` (
+  `cart_id` int(10) UNSIGNED NOT NULL,
+  `course_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`cart_id`,`course_id`),
+  KEY `course_cart_course_id_foreign` (`course_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `payment_settings` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `enable_paypal` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_stripe` tinyint(1) NOT NULL DEFAULT '0',
+  `paypal_live_mode` tinyint(1) NOT NULL DEFAULT '0',
+  `stripe_live_mode` tinyint(1) NOT NULL DEFAULT '0',
+  `paypal_test_secret_key` varchar(100) NOT NULL DEFAULT '',
+  `paypal_test_publishable_key` varchar(100) NOT NULL DEFAULT '',
+  `paypal_live_secret_key` varchar(100) NOT NULL DEFAULT '',
+  `paypal_live_publishable_key` varchar(100) NOT NULL DEFAULT '',
+  `stripe_test_secret_key` varchar(100) NOT NULL DEFAULT '',
+  `stripe_test_publishable_key` varchar(100) NOT NULL DEFAULT '',
+  `stripe_live_secret_key` varchar(100) NOT NULL DEFAULT '',
+  `stripe_live_publishable_key` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `orders` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `total` FLOAT(11) NOT NULL DEFAULT '0.00',
+  `transaction_fee` FLOAT(11) NOT NULL DEFAULT '0.00'
+  `status` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `payment_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `payment_method` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_code_unique` (`code`),
+  KEY `order_user_id_foreign` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `order_items` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) UNSIGNED NOT NULL,
+  `course_id` int(10) UNSIGNED NOT NULL,
+  `price` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `course_cart_course_id_foreign` (`course_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `enrolments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `status` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

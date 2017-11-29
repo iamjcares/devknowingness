@@ -1,6 +1,17 @@
 <?php
 
-use \Redirect as Redirect;
+namespace Knowingness\Http\Controllers;
+
+use Redirect;
+use Knowingness\Models\Setting;
+use Knowingness\Models\Page;
+use Knowingness\Models\Course;
+use Knowingness\Models\Menu;
+use Knowingness\Models\CourseCategory;
+use Knowingness\Models\PostCategory;
+use Knowingness\Libraries\ThemeHelper;
+use View;
+use Knowingness\User;
 
 class ThemeSearchController extends BaseController
 {

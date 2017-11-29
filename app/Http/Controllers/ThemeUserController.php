@@ -1,7 +1,22 @@
 <?php
 
-use HelloVideo\User as User;
-use \Redirect as Redirect;
+namespace Knowingness\Http\Controllers;
+
+use Redirect;
+use Entrust;
+use Knowingness\Models\Page;
+use Knowingness\Models\Course;
+use Knowingness\Models\Menu;
+use Knowingness\Models\CourseCategory;
+use Knowingness\Models\PostCategory;
+use Knowingness\Models\Favorite;
+use Knowingness\Libraries\ThemeHelper;
+use Knowingness\Models\Enrolment;
+use View;
+use Auth;
+use Input;
+use URL;
+use Knowingness\User;
 
 class ThemeUserController extends BaseController
 {
@@ -11,15 +26,19 @@ class ThemeUserController extends BaseController
         $this->middleware('secure');
     }
 
-    public static $rules = array(
-        'username' => 'required|unique:users',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|confirmed'
-    );
+    public static $rules = ['username' => 'required|unique:users', 'email' => 'required|email|unique:users', 'password' => 'required|confirmed'];
 
     public function index($username)
     {
         $user = User::where('username', '=', $username)->first();
+
+        if (Entrust::hasRole('admin')) {
+            $user->role = 'admin';
+        } elseif (Entrust::hasRole('course')) {
+            $user->role = 'author';
+        } else {
+            $user->role = 'user';
+        }
 
         $favorites = Favorite::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->get();
         $favorite_array = array();
@@ -60,6 +79,44 @@ class ThemeUserController extends BaseController
             return View::make('Theme::user', $data);
         } else {
             return Redirect::to('/');
+        }
+    }
+
+    public function courses()
+    {
+        if (!Auth::guest()) {
+
+            $page = Input::get('page');
+
+            if (empty($page)) {
+                $page = 1;
+            }
+
+            $enrols = Enrolment::where('user_id', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
+            $enrol_array = array();
+            foreach ($enrols as $key => $v) {
+                array_push($enrol_array, $v->course_id);
+            }
+
+            $courses = Course::where('active', '=', '1')->whereIn('id', $enrol_array)->paginate(12);
+
+            $data = array(
+                'courses' => $courses,
+                'page_title' => ucfirst(Auth::user()->username) . '\'s Courses',
+                'current_page' => $page,
+                'page_description' => 'Page ' . $page,
+                'menu' => Menu::orderBy('order', 'ASC')->get(),
+                'pagination_url' => URL::to('user') . '/' . Auth::user()->username . '/courses',
+                'course_categories' => CourseCategory::all(),
+                'post_categories' => PostCategory::all(),
+                'theme_settings' => ThemeHelper::getThemeSettings(),
+                'pages' => Page::all(),
+            );
+
+            return View::make('Theme::course-list', $data);
+        } else {
+            return Redirect::to('courses');
         }
     }
 
@@ -133,142 +190,6 @@ class ThemeUserController extends BaseController
                 'invoices' => $invoices,
                 'pages' => Page::all(),
             );
-            return View::make('Theme::user', $data);
-        } else {
-            return Redirect::to('/');
-        }
-    }
-
-    public function cancel_account($username)
-    {
-
-        if (Auth::user()->username == $username) {
-
-            $payment_settings = PaymentSetting::first();
-
-            if ($payment_settings->live_mode) {
-                User::setStripeKey($payment_settings->live_secret_key);
-            } else {
-                User::setStripeKey($payment_settings->test_secret_key);
-            }
-
-            $user = Auth::user();
-            $user->subscription()->cancel();
-
-            return Redirect::to('user/' . $username . '/billing')->with(array('note' => 'Your account has been cancelled.', 'note_type' => 'success'));
-        }
-    }
-
-    public function resume_account($username)
-    {
-
-        if (Auth::user()->username == $username) {
-
-            $payment_settings = PaymentSetting::first();
-
-            if ($payment_settings->live_mode) {
-                User::setStripeKey($payment_settings->live_secret_key);
-            } else {
-                User::setStripeKey($payment_settings->test_secret_key);
-            }
-
-            $user = Auth::user();
-            $user->subscription('monthly')->resume();
-
-            return Redirect::to('user/' . $username . '/billing')->with(array('note' => 'Welcome back, your account has been successfully re-activated.', 'note_type' => 'success'));
-        }
-    }
-
-    public function update_cc($username)
-    {
-
-        $payment_settings = PaymentSetting::first();
-
-        if ($payment_settings->live_mode) {
-            User::setStripeKey($payment_settings->live_secret_key);
-        } else {
-            User::setStripeKey($payment_settings->test_secret_key);
-        }
-
-        $user = Auth::user();
-
-        if (Auth::user()->username == $username && $user->subscribed()) {
-
-
-            $data = array(
-                'user' => $user,
-                'post_route' => URL::to('user') . '/' . $user->username . '/update',
-                'type' => 'update_credit_card',
-                'menu' => Menu::orderBy('order', 'ASC')->get(),
-                'payment_settings' => $payment_settings,
-                'course_categories' => CourseCategory::all(),
-                'post_categories' => PostCategory::all(),
-                'theme_settings' => ThemeHelper::getThemeSettings(),
-                'pages' => Page::all(),
-            );
-
-            return View::make('Theme::user', $data);
-        } else {
-            return Redirect::to('user/' . $username);
-        }
-    }
-
-    public function update_cc_store($username)
-    {
-
-
-        $payment_settings = PaymentSetting::first();
-
-        if ($payment_settings->live_mode) {
-            User::setStripeKey($payment_settings->live_secret_key);
-        } else {
-            User::setStripeKey($payment_settings->test_secret_key);
-        }
-
-        $user = Auth::user();
-
-        if (Auth::user()->username == $username) {
-
-            $token = Input::get('stripeToken');
-
-            try {
-
-                $user->subscription('monthly')->resume($token);
-                return Redirect::to('user/' . $username . '/billing')->with(array('note' => 'Your Credit Card Info has been successfully updated.', 'note_type' => 'success'));
-            } catch (Exception $e) {
-                return Redirect::to('/user/' . $username . '/update_cc')->with(array('note' => 'Sorry, there was an error with your card: ' . $e->getMessage(), 'note_type' => 'error'));
-            }
-        } else {
-            return Redirect::to('user/' . $username);
-        }
-    }
-
-    public function renew($username)
-    {
-        $user = User::where('username', '=', $username)->first();
-
-        $payment_settings = PaymentSetting::first();
-
-        if ($payment_settings->live_mode) {
-            User::setStripeKey($payment_settings->live_secret_key);
-        } else {
-            User::setStripeKey($payment_settings->test_secret_key);
-        }
-
-        if (Auth::user()->username == $username) {
-
-            $data = array(
-                'user' => $user,
-                'post_route' => URL::to('user') . '/' . $user->username . '/update',
-                'type' => 'renew_subscription',
-                'menu' => Menu::orderBy('order', 'ASC')->get(),
-                'payment_settings' => $payment_settings,
-                'course_categories' => CourseCategory::all(),
-                'post_categories' => PostCategory::all(),
-                'theme_settings' => ThemeHelper::getThemeSettings(),
-                'pages' => Page::all(),
-            );
-
             return View::make('Theme::user', $data);
         } else {
             return Redirect::to('/');

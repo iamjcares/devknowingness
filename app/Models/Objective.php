@@ -1,6 +1,8 @@
 <?php
 
-class Objective extends Eloquent
+namespace Knowingness\Models;
+
+class Objective extends \Eloquent
 {
 
     protected $table = 'objectives';
@@ -10,7 +12,7 @@ class Objective extends Eloquent
 
     public function course()
     {
-        return $this->belongsTo('Course');
+        return $this->belongsTo('Knowingness\Models\Course');
     }
 
 }

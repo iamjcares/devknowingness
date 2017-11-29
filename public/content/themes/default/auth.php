@@ -3,8 +3,8 @@
 
     <h2 class="form-signin-heading">Please Login</h2>
     <form method="post" action="<?= ($settings->enable_https) ? secure_url('login') : URL::to('login') ?>" class="form-signin">
-        <input type="text" class="form-control" placeholder="Email address or Username" tabindex="0" id="email" name="email" value="<?php if ($settings->demo_mode == 1): ?>demo<?php endif; ?>">
-        <input type="password" class="form-control" placeholder="Password" id="password" name="password" value="<?php if ($settings->demo_mode == 1): ?>demo<?php endif; ?>">
+        <input type="text" class="form-control" placeholder="Email address or Username" tabindex="0" id="email" name="email">
+        <input type="password" class="form-control" placeholder="Password" id="password" name="password">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         <br />
         <input type="hidden" id="redirect" name="redirect" value="<?= Input::get('redirect') ?>" />

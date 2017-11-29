@@ -105,7 +105,7 @@
             endif;
             ?>
             <ol class="dd-list">
-<?php $depth += 1; ?>
+                <?php $depth += 1; ?>
                 @endif
 
 
@@ -113,12 +113,9 @@
                     <div class="dd-handle">{{ $menu_item->name}}<span class="slug">{{ $menu_item->url }}@if($menu_item->type == 'videos' || $menu_item->type == 'posts') (Note: Categories should only be in the top level menu item!) @endif</span></div>
                     <div class="actions"><a href="/admin/menu/edit/{{ $menu_item->id }}" class="edit">Edit</a> <a href="/admin/menu/delete/{{ $menu_item->id }}" class="delete">Delete</a></div>
 
-<?php $previous_item = $menu_item; ?>
+                    <?php $previous_item = $menu_item; ?>
 
                     @endforeach
-
-
-
             </ol>
 
         </div>

@@ -1,11 +1,13 @@
 <?php
 
-class Theme extends Eloquent {
-	protected $guarded = array();
+namespace Knowingness\Models;
 
-	public static $rules = array();
+class Theme extends \Eloquent
+{
 
-	public $timestamps = false;
+    protected $guarded = array();
+    public static $rules = array();
+    public $timestamps = false;
+    protected $fillable = array('name', 'description', 'version', 'slug', 'active');
 
-	protected $fillable = array('name', 'description', 'version', 'slug', 'active');
 }

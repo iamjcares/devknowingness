@@ -7,7 +7,7 @@
     "require": {
         "laravel/framework": "5.4.*",
         "intervention/image": "^2.4",
-        "laravel/socialite": "3.0.0",
+        "laravel/socialite": "3.*.*",
         "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {
@@ -18,14 +18,10 @@
     },
     "autoload": {
         "classmap": [
-            "database",
-            "app/Http/Controllers",
-            "app/Models",
-            "app/Libraries"
+            "database"
         ],
         "psr-4": {
-            "HelloVideo\\": "app/",
-            "Tests\\": "tests/"
+            "Knowingness\\": "app/"
         }
     },
     "autoload-dev": {
@@ -39,6 +35,8 @@
     "scripts": {
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
     }
 }

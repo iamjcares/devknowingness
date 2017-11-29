@@ -1,6 +1,8 @@
 <?php
 
-class Favorite extends Eloquent
+namespace Knowingness\Models;
+
+class Favorite extends \Eloquent
 {
 
     protected $table = 'favorites';
@@ -10,12 +12,12 @@ class Favorite extends Eloquent
 
     public function user()
     {
-        return $this->belongsTo('User')->first();
+        return $this->belongsTo('Knowingness\User')->first();
     }
 
     public function course()
     {
-        return $this->belongsTo('Course')->first();
+        return $this->belongsTo('Knowingness\Models\Course')->first();
     }
 
 }

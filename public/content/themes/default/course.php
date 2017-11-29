@@ -1,4 +1,9 @@
-<?php include('includes/header.php'); ?>
+<?php
+
+use Knowingness\Libraries\ThemeHelper;
+
+include('includes/header.php');
+?>
 
 <div id="video_title">
     <div class="container">
@@ -21,9 +26,8 @@
         <?= $course->title ?>
         <span class="view-count"><i class="fa fa-eye"></i> <?php if (isset($view_increment) && $view_increment == true): ?><?= $course->views + 1 ?><?php else: ?><?= $course->views ?><?php endif; ?> Views </span>
         <div class="favorite btn btn-default <?php if (isset($favorited->id)): ?>active<?php endif; ?>" data-authenticated="<?= !Auth::guest() ?>" data-courseid="<?= $course->id ?>"><i class="fa fa-heart"></i> Favorite</div>
+        <div class="cart btn btn-default" data-authenticated="<?= !Auth::guest() ?>" data-courseid="<?= $course->id ?>"><i class="fa fa-cart-plus"></i> Add to Cart</div>
     </h3>
-
-
     <div class="video-details-container"><?= $course->detail ?></div>
 
 
@@ -123,6 +127,15 @@
             if ($(this).data('authenticated')) {
                 $.post('/favorite', {course_id: $(this).data('courseid'), _token: '<?= csrf_token(); ?>'}, function (data) {});
                 $(this).toggleClass('active');
+            } else {
+                window.location = '/signup';
+            }
+        });
+        $('.cart').click(function () {
+            if ($(this).data('authenticated')) {
+                $.post('/cart/add', {course_id: $(this).data('courseid'), _token: '<?= csrf_token(); ?>'}, function (data) {
+                    window.location = '/courses';
+                });
             } else {
                 window.location = '/signup';
             }

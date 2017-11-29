@@ -1,8 +1,11 @@
 <?php
 
-use \Redirect as Redirect;
+namespace Knowingness\Http\Controllers;
 
-class AdminCoursesController extends \BaseController
+use Knowingness\Http\Controllers\BaseController;
+use Redirect;
+
+class AdminCoursesController extends BaseController
 {
 
     /**

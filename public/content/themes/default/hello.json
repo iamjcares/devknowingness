@@ -1,0 +1,104 @@
+
+{
+    "id": "PAY-5GE00064K03058438LIGPB5Y",
+    "intent": "sale",
+    "state": "approved",
+    "cart": "4EA415293C1541613",
+    "payer": {
+        "payment_method": "paypal",
+        "status": "VERIFIED",
+        "payer_info": {
+            "email": "brenda-knowingness@paypal.com",
+            "first_name": "Brenda",
+            "last_name": "Cardoza",
+            "payer_id": "B4QZPN753XZ6U",
+            "shipping_address": {
+                "recipient_name": "Brenda Cardoza",
+                "line1": "1 Main St",
+                "city": "San Jose",
+                "state": "CA",
+                "postal_code": "95131",
+                "country_code": "US"
+            },
+            "country_code": "US"
+        }
+    },
+    "transactions": [{
+            "amount": {
+                "total": "110.00",
+                "currency": "USD",
+                "details": []
+            },
+            "payee": {
+                "merchant_id": "TDV74XMUAPYAG",
+                "email": "cardozabrendar-facilitator@gmail.com"
+            },
+            "description": "Course Purchased on Knowingness.com",
+            "invoice_number": "DD7E65B662C500EB89487083756506",
+            "item_list": {
+                "items": [{
+                        "name": "Jurassic World Trailer",
+                        "description": "Steven Spielberg returns to executive produce the ",
+                        "price": "100.00",
+                        "currency": "USD",
+                        "quantity": 1
+                    }, {
+                        "name": "Does My Dog Know What I'm Thinking?",
+                        "description": "Do you ever talk to your dog? Do they ever talk ba",
+                        "price": "10.00",
+                        "currency": "USD",
+                        "quantity": 1
+                    }],
+                "shipping_address": {
+                    "recipient_name": "Brenda Cardoza",
+                    "line1": "1 Main St",
+                    "city": "San Jose",
+                    "state": "CA",
+                    "postal_code": "95131",
+                    "country_code": "US"
+                }
+            },
+            "related_resources": [{
+                    "sale": {
+                        "id": "7TG077436Y1503429",
+                        "state": "completed",
+                        "amount": {
+                            "total": "110.00",
+                            "currency": "USD",
+                            "details": {
+                                "subtotal": "110.00"
+                            }
+                        },
+                        "payment_mode": "INSTANT_TRANSFER",
+                        "protection_eligibility": "ELIGIBLE",
+                        "protection_eligibility_type": "ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE",
+                        "transaction_fee": {
+                            "value": "3.49",
+                            "currency": "USD"
+                        },
+                        "parent_payment": "PAY-5GE00064K03058438LIGPB5Y",
+                        "create_time": "2017-11-16T02:00:21Z",
+                        "update_time": "2017-11-16T02:00:21Z",
+                        "links": [{
+                                "href": "https:\/\/api.sandbox.paypal.com\/v1\/payments\/sale\/7TG077436Y1503429",
+                                "rel": "self",
+                                "method": "GET"
+                            }, {
+                                "href": "https:\/\/api.sandbox.paypal.com\/v1\/payments\/sale\/7TG077436Y1503429\/refund",
+                                "rel": "refund",
+                                "method": "POST"
+                            }, {
+                                "href": "https:\/\/api.sandbox.paypal.com\/v1\/payments\/payment\/PAY-5GE00064K03058438LIGPB5Y",
+                                "rel": "parent_payment",
+                                "method": "GET"
+                            }]
+                    }
+                }]
+        }],
+    "create_time": "2017-11-16T02:00:22Z",
+    "links": [{
+            "href": "https:\/\/api.sandbox.paypal.com\/v1\/payments\/payment\/PAY-5GE00064K03058438LIGPB5Y",
+            "rel": "self",
+            "method": "GET"
+        }]
+}

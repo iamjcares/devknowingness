@@ -1,8 +1,16 @@
 <?php
 
-use \Redirect as Redirect;
+namespace Knowingness\Http\Controllers;
 
-class AdminPageController extends \BaseController {
+use Knowingness\Http\Controllers\BaseController;
+use Knowingness\Models\Page;
+use Auth;
+use Validator;
+use Redirect;
+use Input;
+
+class AdminPageController extends BaseController
+{
 
     /**
      * Display a listing of videos
@@ -18,7 +26,7 @@ class AdminPageController extends \BaseController {
             'pages' => $pages,
             'user' => $user,
             'admin_user' => Auth::user()
-            );
+        );
 
         return View::make('admin.pages.index', $data);
     }
@@ -34,7 +42,7 @@ class AdminPageController extends \BaseController {
             'post_route' => URL::to('admin/pages/store'),
             'button_text' => 'Add New Page',
             'admin_user' => Auth::user()
-            );
+        );
         return View::make('admin.pages.create_edit', $data);
     }
 
@@ -47,14 +55,13 @@ class AdminPageController extends \BaseController {
     {
         $validator = Validator::make($data = Input::all(), Page::$rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
         $page = Page::create($data);
 
-        return Redirect::to('admin/pages')->with(array('note' => 'New Page Successfully Added!', 'note_type' => 'success') );
+        return Redirect::to('admin/pages')->with(array('note' => 'New Page Successfully Added!', 'note_type' => 'success'));
     }
 
     /**
@@ -73,7 +80,7 @@ class AdminPageController extends \BaseController {
             'post_route' => URL::to('admin/pages/update'),
             'button_text' => 'Update Page',
             'admin_user' => Auth::user()
-            );
+        );
 
         return View::make('admin.pages.create_edit', $data);
     }
@@ -92,14 +99,13 @@ class AdminPageController extends \BaseController {
 
         $validator = Validator::make($data, Page::$rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
         $page->update($data);
 
-        return Redirect::to('admin/pages/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Page!', 'note_type' => 'success') );
+        return Redirect::to('admin/pages/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Page!', 'note_type' => 'success'));
     }
 
     /**
@@ -114,8 +120,7 @@ class AdminPageController extends \BaseController {
 
         Page::destroy($id);
 
-        return Redirect::to('admin/pages')->with(array('note' => 'Successfully Deleted Page', 'note_type' => 'success') );
+        return Redirect::to('admin/pages')->with(array('note' => 'Successfully Deleted Page', 'note_type' => 'success'));
     }
-
 
 }

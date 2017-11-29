@@ -1,7 +1,11 @@
 <?php
 
-use \HelloVideo\User as User;
-use Carbon\Carbon as Carbon;
+namespace Knowingness\Http\Controllers;
+
+use Auth;
+use Knowingness\User;
+use Knowingness\Models\Settings;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
