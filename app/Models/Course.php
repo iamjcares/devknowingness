@@ -21,7 +21,7 @@ class Course extends \Eloquent
 
     public function chapters()
     {
-        return $this->hasMany('Knowingness\Models\Chapter');
+        return $this->hasMany('Knowingness\Models\Chapter')->with('lectures');
     }
 
     public function objectives()

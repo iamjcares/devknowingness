@@ -4,6 +4,10 @@ namespace Knowingness\Http\Controllers;
 
 use Redirect;
 use Entrust;
+use View;
+use Auth;
+use Input;
+use URL;
 use Knowingness\Models\Page;
 use Knowingness\Models\Course;
 use Knowingness\Models\Menu;
@@ -12,11 +16,8 @@ use Knowingness\Models\PostCategory;
 use Knowingness\Models\Favorite;
 use Knowingness\Libraries\ThemeHelper;
 use Knowingness\Models\Enrolment;
-use View;
-use Auth;
-use Input;
-use URL;
 use Knowingness\User;
+use Knowingness\Role;
 
 class ThemeUserController extends BaseController
 {
@@ -32,9 +33,12 @@ class ThemeUserController extends BaseController
     {
         $user = User::where('username', '=', $username)->first();
 
+        if ($user->id !== Auth::user()->id) {
+            return Redirect::to('user/' . Auth::user()->username);
+        }
         if (Entrust::hasRole('admin')) {
             $user->role = 'admin';
-        } elseif (Entrust::hasRole('course')) {
+        } elseif (Entrust::hasRole('author')) {
             $user->role = 'author';
         } else {
             $user->role = 'user';
@@ -59,6 +63,16 @@ class ThemeUserController extends BaseController
             'pages' => Page::all(),
         );
         return View::make('Theme::user', $data);
+    }
+
+    public function joinAuthor()
+    {
+        $user = Auth::user();
+        if (!$user->hasRole('author')) {
+            $authorRole = Role::where('name', '=', 'author')->first();
+            $user->attachRole($authorRole);
+        }
+        return Redirect::to('admin');
     }
 
     public function edit($username)
@@ -155,45 +169,6 @@ class ThemeUserController extends BaseController
         }
 
         return Redirect::to('user/' . Auth::user()->username . '/edit ')->with(array('note' => 'Sorry, there seems to have been an error when updating the user info', 'note_type' => 'error'));
-    }
-
-    public function billing($username)
-    {
-
-        if (Auth::user()->username == $username) {
-
-            if (Auth::user()->role == 'admin' || Auth::user()->role == 'admin') {
-                return Redirect::to('/user/' . $username . '/edit')->with(array('note' => 'This user type does not have billing info associated with their account.', 'note_type' => 'warning'));
-            }
-
-            $user = User::where('username', '=', $username)->first();
-
-            $payment_settings = PaymentSetting::first();
-
-            if ($payment_settings->live_mode) {
-                User::setStripeKey($payment_settings->live_secret_key);
-            } else {
-                User::setStripeKey($payment_settings->test_secret_key);
-            }
-
-            $invoices = $user->invoices();
-
-            $data = array(
-                'user' => $user,
-                'post_route' => URL::to('user') . '/' . $user->username . '/update',
-                'type' => 'billing',
-                'menu' => Menu::orderBy('order', 'ASC')->get(),
-                'course_categories' => CourseCategory::all(),
-                'post_categories' => PostCategory::all(),
-                'theme_settings' => ThemeHelper::getThemeSettings(),
-                'payment_settings' => $payment_settings,
-                'invoices' => $invoices,
-                'pages' => Page::all(),
-            );
-            return View::make('Theme::user', $data);
-        } else {
-            return Redirect::to('/');
-        }
     }
 
 }

@@ -3,7 +3,20 @@
 namespace Knowingness\Http\Controllers;
 
 use Knowingness\Http\Controllers\BaseController;
-use Redirect;
+use Knowingness\Models\Course;
+use Knowingness\Libraries\ImageHandler;
+use Knowingness\Models\Tag;
+use Knowingness\Models\Objective;
+use Knowingness\Models\Requirement;
+use Knowingness\Models\Prerequisite;
+use Knowingness\Models\CourseCategory;
+use Redirect,
+    Input,
+    Auth,
+    View,
+    URL,
+    Config,
+    Validator;
 
 class AdminCoursesController extends BaseController
 {
@@ -16,18 +29,20 @@ class AdminCoursesController extends BaseController
     public function index()
     {
 
+        $user = Auth::user();
         $search_value = Input::get('s');
 
-        if (!empty($search_value)):
-            $courses = Course::where('title', 'LIKE', '%' . $search_value . '%')->orderBy('created_at', 'desc')->paginate(9);
-        else:
-            $courses = Course::orderBy('created_at', 'DESC')->paginate(9);
-        endif;
-
-        $user = Auth::user();
+        if (!empty($search_value)) {
+            $courses = Course::where('title', 'LIKE', '%' . $search_value . '%')->orderBy('created_at', 'desc');
+        } else {
+            $courses = Course::orderBy('created_at', 'DESC');
+        }
+        if (!$user->hasRole('admin')) {
+            $courses->where('user_id', $user->id);
+        }
 
         $data = array(
-            'courses' => $courses,
+            'courses' => $courses->paginate(12),
             'user' => $user,
             'admin_user' => Auth::user()
         );
@@ -111,7 +126,11 @@ class AdminCoursesController extends BaseController
     public function edit($id)
     {
         $course = Course::find($id);
+        $user = Auth::user();
 
+        if ($course->user_id !== $user->id || !$user->hasRole('admin')) {
+            return Redirect::to('admin/courses')->with(array('note' => 'You do not have permission to edit this course!', 'note_type' => 'success'));
+        }
         $data = array(
             'headline' => '<i class="fa fa-edit"></i> Edit Course',
             'course' => $course,
@@ -189,29 +208,35 @@ class AdminCoursesController extends BaseController
     public function destroy($id)
     {
         $course = Course::find($id);
+        $user = Auth::user();
 
-        // Detach and delete any unused tags
-        foreach ($course->tags as $tag) {
-            $this->detachTagFromCourse($course, $tag->id);
-            if (!$this->isTagContainedInAnyCourses($tag->name)) {
-                $tag->delete();
+        if ($user->hasRole('admin') || $course->user_id === $user->id) {
+
+            // Detach and delete any unused tags
+            foreach ($course->tags as $tag) {
+                $this->detachTagFromCourse($course, $tag->id);
+                if (!$this->isTagContainedInAnyCourses($tag->name)) {
+                    $tag->delete();
+                }
             }
-        }
-        foreach ($course->requirements as $req) {
-            $req->delete();
-        }
-        foreach ($course->objectives as $obj) {
-            $obj->delete();
-        }
-        foreach ($course->prerequisites as $pre) {
-            $pre->delete();
-        }
+            foreach ($course->requirements as $req) {
+                $req->delete();
+            }
+            foreach ($course->objectives as $obj) {
+                $obj->delete();
+            }
+            foreach ($course->prerequisites as $pre) {
+                $pre->delete();
+            }
 
-        $this->deleteCourseImages($course);
+            $this->deleteCourseImages($course);
 
-        Course::destroy($id);
+            Course::destroy($id);
 
-        return Redirect::to('admin/courses')->with(array('note' => 'Successfully Deleted Course', 'note_type' => 'success'));
+            return Redirect::to('admin/courses')->with(array('note' => 'Successfully Deleted Course', 'note_type' => 'success'));
+        } else {
+            return Redirect::to('admin/courses')->with(array('note' => 'You do not have permission to delete this course!', 'note_type' => 'error'));
+        }
     }
 
     private function addUpdateCourseTags($course, $tags)

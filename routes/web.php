@@ -28,7 +28,7 @@ Route::group([], function() {
     Route::get('courses', array('uses' => 'ThemeCourseController@courses', 'as' => 'courses'));
     Route::get('courses/category/{category}', 'ThemeCourseController@category');
     Route::get('courses/tag/{tag}', 'ThemeCourseController@tag');
-    Route::get('course/{id}', 'ThemeCourseController@index');
+    Route::get('course/{slug}', 'ThemeCourseController@index');
 
     /*
       |--------------------------------------------------------------------------
@@ -120,6 +120,10 @@ Route::group(['middleware' => ['role:user']], function() {
     Route::get('wishlist/clear', 'ThemeWishListController@clearCart');
     Route::get('wishlist', 'ThemeWishListController@index');
 
+
+    Route::get('join-author', 'ThemeUserController@joinAuthor');
+
+
     /*
       |--------------------------------------------------------------------------
       | User and User Edit Routes
@@ -130,6 +134,7 @@ Route::group(['middleware' => ['role:user']], function() {
     Route::get('user/{username}/edit', 'ThemeUserController@edit');
     Route::get('user/{username}/courses', ['uses' => 'ThemeUserController@courses', 'as' => 'my-courses']);
     Route::post('user/{username}/update', 'ThemeUserController@update');
+    Route::get('course/learn/{slug}', 'ThemeLearnController@index');
 });
 
 
@@ -144,7 +149,7 @@ Route::get('upgrade', 'UpgradeController@upgrade');
   |--------------------------------------------------------------------------
  */
 
-Route::group(['prefix' => 'admin', 'middleware' => ['role:admin']], function() {
+Route::group(['prefix' => 'admin', 'middleware' => ['role:admin|author']], function() {
 // Admin Dashboard
     Route::get('/', 'AdminController@index');
 

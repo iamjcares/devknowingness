@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
 
-        <?php $settings = Setting::first(); ?>
+        <?php $settings = Knowingness\Models\Setting::first(); ?>
 
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">

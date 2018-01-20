@@ -2,6 +2,7 @@
 
 namespace Knowingness\Libraries;
 
+use Knowingness\Models\Setting;
 use Config;
 use Image;
 

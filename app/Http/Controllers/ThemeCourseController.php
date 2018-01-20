@@ -12,6 +12,7 @@ use Knowingness\Models\Favorite;
 use Knowingness\Models\CourseCategory;
 use Knowingness\Models\PostCategory;
 use Knowingness\Libraries\ThemeHelper;
+use Knowingness\Models\Enrolment;
 use View;
 use Input;
 use Auth;
@@ -34,35 +35,41 @@ class ThemeCourseController extends BaseController
      * @param  int  $id
      * @return Response
      */
-    public function index($id)
+    public function index($slug)
     {
-        $course = Course::with(['tags', 'objectives', 'requirements', 'prerequisites', 'faqs', 'chapters'])->where('slug', '=', $id)->first();
-        //Make sure course is active
-        if ((!Auth::guest() && Auth::user()->role == 'admin') || $course->active) {
+        $course = Course::with(['tags', 'objectives', 'requirements', 'prerequisites', 'faqs', 'chapters'])->where('slug', '=', $slug)->first();
+        $enrolment = Enrolment::where('course_id', $course->id)->where('user_id', Auth::user()->id)->first();
 
-            $favorited = false;
-            if (!Auth::guest()) {
-                $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)->first();
+        if (empty($enrolment || !$course->active)) {
+            //Make sure course is active
+            if ((!Auth::guest() && Auth::user()->hasRole('admin')) || $course->active) {
+
+                $favorited = false;
+                if (!Auth::guest()) {
+                    $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)->first();
+                }
+
+                // load videos into chapters.
+                $chapters = $course->chapters()->with('lectures')->get();
+
+                //$view_increment = $this->handleViewCount($id);
+                $data = array(
+                    'course' => $course,
+                    'chapters' => $chapters,
+                    'menu' => Menu::orderBy('order', 'ASC')->get(),
+                    'view_increment' => true,
+                    'favorited' => $favorited,
+                    'course_categories' => CourseCategory::all(),
+                    'post_categories' => PostCategory::all(),
+                    'theme_settings' => ThemeHelper::getThemeSettings(),
+                    'pages' => Page::all(),
+                );
+                return View::make('Theme::course', $data);
+            } else {
+                return Redirect::to('courses')->with(array('note' => 'Sorry, this course is no longer active.', 'note_type' => 'error'));
             }
-
-            // load videos into chapters.
-            $chapters = $course->chapters()->with('lectures')->get();
-
-            //$view_increment = $this->handleViewCount($id);
-            $data = array(
-                'course' => $course,
-                'chapters' => $chapters,
-                'menu' => Menu::orderBy('order', 'ASC')->get(),
-                'view_increment' => true,
-                'favorited' => $favorited,
-                'course_categories' => CourseCategory::all(),
-                'post_categories' => PostCategory::all(),
-                'theme_settings' => ThemeHelper::getThemeSettings(),
-                'pages' => Page::all(),
-            );
-            return View::make('Theme::course', $data);
         } else {
-            return Redirect::to('courses')->with(array('note' => 'Sorry, this course is no longer active.', 'note_type' => 'error'));
+            return Redirect::to('course/learn/' . $slug);
         }
     }
 

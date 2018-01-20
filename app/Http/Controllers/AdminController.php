@@ -4,8 +4,11 @@ namespace Knowingness\Http\Controllers;
 
 use Auth;
 use Knowingness\User;
-use Knowingness\Models\Settings;
+use Knowingness\Models\Setting;
 use Carbon\Carbon;
+use View;
+use Knowingness\Models\Course;
+use Knowingness\Models\Post;
 
 class AdminController extends Controller
 {
@@ -20,8 +23,8 @@ class AdminController extends Controller
         $start = (new Carbon('now'))->hour(0)->minute(0)->second(0);
         $end = (new Carbon('now'))->hour(23)->minute(59)->second(59);
 
-        $total_subscribers = count(User::where('active', '=', 1)->where('role', '=', 'subscriber')->where('stripe_active', '=', 1)->get());
-        $new_subscribers = count(User::where('active', '=', 1)->where('role', '=', 'subscriber')->where('stripe_active', '=', 1)->whereBetween('created_at', [$start, $end])->get());
+        $total_subscribers = count(User::where('active', '=', 1)->get());
+        $new_subscribers = count(User::where('active', '=', 1)->whereBetween('created_at', [$start, $end])->get());
         $total_courses = count(Course::where('active', '=', 1)->get());
         $total_posts = count(Post::where('active', '=', 1)->get());
 

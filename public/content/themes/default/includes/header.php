@@ -38,9 +38,17 @@
                                     <li><a href="<?= ($settings->enable_https) ? secure_url('cart') : URL::to('cart') ?>">My Cart</a></li>
                                     <li><a href="<?= ($settings->enable_https) ? secure_url('wishlist') : URL::to('wishlist') ?>">My Wishlist</a></li>
 
-                                    <?php if (Entrust::hasRole(['admin', 'author'])): ?>
+                                    <?php if (!Entrust::hasRole(['author', 'admin'])): ?>
                                         <li class="divider"></li>
-                                        <li><a href="<?= ($settings->enable_https) ? secure_url('admin') : URL::to('admin') ?>"> Admin</a></li>
+                                        <li><a href="<?= ($settings->enable_https) ? secure_url('join-author') : URL::to('join-author') ?>"> Become Author</a></li>
+                                    <?php endif; ?>
+                                    <?php if (Entrust::hasRole('admin')): ?>
+                                        <li class="divider"></li>
+                                        <li><a href="<?= ($settings->enable_https) ? secure_url('admin') : URL::to('admin') ?>"> Admin Page</a></li>
+                                    <?php endif; ?>
+                                    <?php if (Entrust::hasRole(['author']) && !Entrust::hasRole(['admin'])): ?>
+                                        <li class="divider"></li>
+                                        <li><a href="<?= ($settings->enable_https) ? secure_url('admin') : URL::to('admin') ?>">Author Page</a></li>
                                     <?php endif; ?>
                                     <li class="divider"></li>
                                     <li><a href="<?= ($settings->enable_https) ? secure_url('logout') : URL::to('logout') ?>" id="user_logout_mobile"><i class="fa fa-power-off"></i> Logout</a></li>
